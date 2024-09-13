@@ -44,7 +44,7 @@ git clone https://github.com/Ashishrdc/MusicX.git
 Move into the project folder:
 
 ```bash
-cd musicx
+cd Musicx
 ```
 
 ### Step 3: Install Dependencies
@@ -88,7 +88,7 @@ pnpm run dev
 Or using yarn:
 
 ```bash
-yarn start
+yarn dev
 ```
 
 The development server will start at `http://localhost:5000`.
