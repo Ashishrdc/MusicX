@@ -1,9 +1,10 @@
 import { useRef } from "react";
-import { Slider, Box } from "@mui/material";
+import { Slider, useTheme } from "@mui/material";
 import { usePlayer } from "../../context/player/PlayerContext";
 
 export const Seekbar = () => {
   const { audioRef, currentTime, duration, setCurrentTime } = usePlayer();
+  const theme = useTheme();
   const isScrubbing = useRef(false);
 
   // Handle user scrubbing
@@ -24,36 +25,45 @@ export const Seekbar = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-      {/* Seekbar Slider */}
-      <Slider
-        value={currentTime}
-        min={0}
-        max={duration}
-        step={1}
-        onChange={handleSeek}
-        onChangeCommitted={handleSeekEnd}
-        onMouseDown={handleSeekStart}
-        sx={{
-          flexGrow: 1,
-          backgroundColor: "red",
-
-          "& .MuiSlider-thumb": {
-            width: 12,
-            height: 12,
-            "&:hover": {
-              boxShadow: "0 0 0 8px rgba(0,0,0,0.16)",
-            },
+    <Slider
+      value={currentTime}
+      min={0}
+      max={duration}
+      step={1}
+      onChange={handleSeek}
+      onChangeCommitted={handleSeekEnd}
+      onMouseDown={handleSeekStart}
+      sx={{
+        padding: 0,
+        borderRadius: 0,
+        width: "100%",
+        "& .MuiSlider-thumb": {
+          display:
+            currentTime < 3 || currentTime > duration - 10 ? "none" : "block",
+          color: theme.palette.secondary.main,
+          borderRadius: 0,
+          height: 6,
+          width: 10,
+          opacity: 1,
+          transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+          "&:hover, &.Mui-focusVisible, &.Mui-active": {
+            height: 15,
+            width: 15,
+            borderRadius: 1,
+            backgroundColor: theme.palette.secondary.main,
           },
-          "& .MuiSlider-track": {
-            height: 6,
-          },
-          "& .MuiSlider-rail": {
-            height: 6,
-            opacity: 0.3,
-          },
-        }}
-      />
-    </Box>
+        },
+        "& .MuiSlider-track": {
+          height: 4,
+        },
+        "& .MuiSlider-rail": {
+          height: 4,
+          backgroundColor: theme.palette.secondary.main,
+        },
+        "@media (pointer: coarse)": {
+          padding: "0 !important", // Override the default padding
+        },
+      }}
+    />
   );
 };

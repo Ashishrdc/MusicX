@@ -177,8 +177,9 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       setCurrentTime(0);
       setDuration(currentSong.duration || audioRef.current.duration);
       safePlay();
+      play();
     }
-  }, [currentSong]);
+  }, [currentSong, play]);
 
   // Update currentTime on timeupdate
   useEffect(() => {

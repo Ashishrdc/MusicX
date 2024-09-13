@@ -19,6 +19,7 @@ export const MusicPlayer = () => {
           display: "flex",
           position: "absolute",
           width: "100%",
+          top: 0,
         }}
       >
         <Seekbar />
@@ -29,6 +30,8 @@ export const MusicPlayer = () => {
           gridTemplateColumns: isSmallScreen ? "1fr 50px" : "1fr 1fr 1fr",
           alignItems: "center",
           width: "100%",
+          marginTop: 0.5,
+          padding: 1,
           gap: 2,
         }}
       >
@@ -38,9 +41,8 @@ export const MusicPlayer = () => {
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            gap: 1,
-            padding: 1,
             overflow: "hidden", // Ensures the content won't overflow
+            gap: 1,
           }}
         >
           <Box
