@@ -12,13 +12,16 @@
 - Seamless music playback with queue and playlist management (In Progress)
 - Mobile-friendly design
 
-## Technologies Used
+## Technologies Used / Tech Stack
+# Frontend
+- **Node.js**: JavaScript runtime for server-side execution
+- **React**: JavaScript library for building user interfaces
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Strongly typed programming language for better code quality
+- **Material UI (MUI)**: Component library for building sleek, responsive UIs
 
-- **Node.js**: Backend framework
-- **React.js**: Frontend framework
-- **Material UI (MUI)**: UI components
-- **TypeScript**: Strongly typed programming for enhanced development
-- **Unofficial JioSaavn API**: Fetch music data
+# Backend
+- **Unofficial JioSaavn API**: For fetching music data
 
 ## Setup Instructions
 
