@@ -13,14 +13,14 @@
 - Mobile-friendly design
 
 ## Technologies Used / Tech Stack
-# Frontend
+### Frontend
 - **Node.js**: JavaScript runtime for server-side execution
 - **React**: JavaScript library for building user interfaces
 - **Vite**: Fast build tool and development server
 - **TypeScript**: Strongly typed programming language for better code quality
 - **Material UI (MUI)**: Component library for building sleek, responsive UIs
 
-# Backend
+### Backend
 - **Unofficial JioSaavn API**: For fetching music data
 
 ## Setup Instructions
