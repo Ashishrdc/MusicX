@@ -18,6 +18,7 @@ export const MusicPlayer = () => {
         sx={{
           display: "flex",
           position: "absolute",
+          overflowX: "clip",
           width: "100%",
           top: 0,
         }}
@@ -29,6 +30,7 @@ export const MusicPlayer = () => {
           display: "grid",
           gridTemplateColumns: isSmallScreen ? "1fr 50px" : "1fr 1fr 1fr",
           alignItems: "center",
+          justifyContent: "space-between",
           width: "100%",
           marginTop: 0.5,
           padding: 1,

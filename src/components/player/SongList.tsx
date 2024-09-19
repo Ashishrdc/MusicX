@@ -23,7 +23,6 @@ export const SongList = ({ songs }: SongList) => {
     <Box
       sx={{
         display: "grid",
-        gap: 1,
         gridTemplateColumns:
           viewMode === "grid"
             ? {
@@ -41,6 +40,8 @@ export const SongList = ({ songs }: SongList) => {
               }
             : "none",
         paddingRight: 2,
+        marginBottom: 1,
+        gap: 1,
       }}
     >
       {songs.map((song) =>

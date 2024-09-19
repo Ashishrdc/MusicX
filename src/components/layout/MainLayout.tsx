@@ -15,9 +15,9 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Box
       sx={{
-        height: isSmallScreen ? "100dvh" : "100vh",
         display: "flex",
         flexDirection: "column",
+        height: isSmallScreen ? "100dvh" : "100vh",
       }}
     >
       {/* Container for sidebar and main content */}
@@ -79,7 +79,14 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           }}
         >
           {/* Navbar */}
-          <Box sx={{ padding: 1 }}>
+          <Box
+            sx={{
+              padding: isSmallScreen ? 0.5 : 1,
+              backdropFilter: "blur(10px)",
+              width: "100%",
+              top: 0,
+            }}
+          >
             {isSmallScreen && searchMode ? <SearchBar /> : <Navbar />}
           </Box>
 
@@ -88,20 +95,14 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             sx={{
               flex: 1,
               overflowY: "auto",
-              padding: 2,
+              padding: isSmallScreen ? 1 : 2,
             }}
           >
             {children}
           </Box>
 
           {/* Bottom Bar */}
-          <Box
-            sx={{
-              position: "relative",
-            }}
-          >
-            {currentSong && <Footer />}
-          </Box>
+          <Box>{currentSong && <Footer />}</Box>
         </Box>
       </Box>
     </Box>

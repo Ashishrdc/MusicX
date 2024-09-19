@@ -39,7 +39,7 @@ export const Seekbar = () => {
         width: "100%",
         "& .MuiSlider-thumb": {
           display:
-            currentTime < 3 || currentTime > duration - 10 ? "none" : "block",
+            currentTime < 5 || currentTime > duration - 5 ? "none" : "block",
           color: theme.palette.secondary.main,
           borderRadius: 0,
           height: 6,

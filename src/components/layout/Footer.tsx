@@ -3,7 +3,12 @@ import { MusicPlayer } from "../player/MusicPlayer";
 
 export const Footer = () => {
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        position: "relative",
+      }}
+    >
       <MusicPlayer />
     </Box>
   );
