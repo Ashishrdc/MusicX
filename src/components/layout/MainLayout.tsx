@@ -82,7 +82,6 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           <Box
             sx={{
               padding: isSmallScreen ? 0.5 : 1,
-              backdropFilter: "blur(10px)",
               width: "100%",
               top: 0,
             }}

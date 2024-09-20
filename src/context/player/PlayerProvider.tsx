@@ -212,6 +212,32 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [isPlaying]);
 
+  const getNextSong = useCallback(() => {
+    if (!queue.length || !currentSong) {
+      return "End of list";
+    }
+
+    const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
+
+    // If repeatMode is "one", repeat the current song
+    if (repeatMode === "one") {
+      return "Repeating current song";
+    }
+
+    // If repeatMode is "off" and the current song is the last in the queue
+    if (repeatMode === "off" && currentIndex === queue.length - 1) {
+      return "End of list";
+    }
+
+    // If repeatMode is "all" and the current song is the last, loop back to the first song
+    if (repeatMode === "all" && currentIndex === queue.length - 1) {
+      return queue[0]; // Return the first song in the queue
+    }
+
+    // Return the next song in the queue if available
+    return queue[currentIndex + 1] || "End of list";
+  }, [queue, currentSong, repeatMode]);
+
   // Save playlist and queue to localStorage
   useEffect(() => {
     localStorage.setItem("playlist", JSON.stringify(playlist));
@@ -252,6 +278,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       addToQueue,
       clearQueue,
       removeFromQueue,
+      getNextSong,
     }),
     [
       currentSong,
@@ -272,6 +299,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       addToQueue,
       removeFromQueue,
       setAndPlaySong,
+      getNextSong,
     ]
   );
 

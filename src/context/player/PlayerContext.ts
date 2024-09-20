@@ -27,6 +27,7 @@ interface PlayerContextType {
   addToQueue: (song: Song) => void;
   clearQueue: () => void;
   removeFromQueue: (songId: string) => void;
+  getNextSong: () => Song | string;
 }
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(
