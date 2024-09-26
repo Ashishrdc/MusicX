@@ -17,9 +17,9 @@ interface PlayerContextType {
   setAndPlaySong: (song: Song) => void;
   toggleRepeatMode: () => void;
   play: () => void;
+  pause: () => void;
   playNext: () => void;
   playPrevious: () => void;
-  pause: () => void;
   setVolume: (volume: number) => void;
   addToPlaylist: (song: Song) => void;
   setPlaylist?: (songs: Song[]) => void;

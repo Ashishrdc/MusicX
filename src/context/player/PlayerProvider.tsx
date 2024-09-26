@@ -26,11 +26,6 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   // Ref
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  console.log({
-    currentSong: currentSong,
-    queue: queue,
-  });
-
   //-----------------------------Functions--------------------------------//
   // Helper function for safe playback
   const safePlay = () => {
@@ -134,6 +129,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   const clearQueue = () => setQueue([]);
 
   // ---------------------Toggles---------------------- //
+
   // Toggle repeat mode (off -> one -> all -> off)
   const toggleRepeatMode = () => {
     setRepeatMode((prevMode) => {

@@ -4,10 +4,11 @@ import { VolumeControl } from "../buttons/VolumeControl";
 import { formatSecondsToTime } from "../../util/helperFunctions";
 import { usePlayer } from "../../context/player/PlayerContext";
 import { useLayout } from "../../context/layout/LayoutContext";
-import he from "he";
 import { Seekbar } from "./Seekbar";
+import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
+import he from "he";
 
-export const MusicPlayer = () => {
+export const MiniPlayer = () => {
   const { currentSong, currentTime, duration } = usePlayer();
   const { isSmallScreen } = useLayout();
 
@@ -128,7 +129,9 @@ export const MusicPlayer = () => {
                 duration
               )}`}
             </Typography>
+
             <VolumeControl />
+            <FSPlayerToggle />
           </Box>
         )}
       </Box>

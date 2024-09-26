@@ -6,6 +6,7 @@ import { Box, Modal, Paper, Slide } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
 import { usePlayer } from "../../context/player/PlayerContext";
+import { FSPlayer } from "../player/FSPlayer";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { sidebarState, isSmallScreen, toggleSidebarState, searchMode } =
@@ -76,8 +77,12 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             display: "flex",
             flexDirection: "column",
             height: isSmallScreen ? "100dvh" : "100vh",
+            position: "relative",
           }}
         >
+          <Box>
+            <FSPlayer />
+          </Box>
           {/* Navbar */}
           <Box
             sx={{

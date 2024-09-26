@@ -25,12 +25,20 @@ export const SongList = ({ songs }: SongList) => {
         display: "grid",
         gridTemplateColumns:
           viewMode === "grid"
-            ? {
-                xs: "repeat(auto-fit, minmax(120px, 1fr))", // 2 columns with min 120px width
-                sm: "repeat(auto-fit, minmax(140px, 1fr))", // 3 columns with min 140px width
-                md: "repeat(auto-fit, minmax(160px, 1fr))", // 4 columns with min 160px width
-                lg: "repeat(auto-fit, minmax(180px, 1fr))", // 5 columns with min 180px width
-              }
+            ? songs.length > 5
+              ? {
+                  xs: "repeat(auto-fit, minmax(120px, 1fr))", // 2 columns with min 120px width
+                  sm: "repeat(auto-fit, minmax(140px, 1fr))", // 3 columns with min 140px width
+                  md: "repeat(auto-fit, minmax(160px, 1fr))", // 4 columns with min 160px width
+                  lg: "repeat(auto-fit, minmax(180px, 1fr))", // 5 columns with min 180px width
+                }
+              : {
+                  // When there are less result
+                  xs: "repeat(auto-fit, minmax(120px, 1fr))", // 2/3 columns when small screens
+                  sm: "repeat(4, 1fr)", // 4 columns on small screens
+                  md: "repeat(5, 1fr)", // 5 columns on medium screens
+                  lg: "repeat(6, 1fr)", // 6 columns on large screens when there are few songs
+                }
             : viewMode === "list"
             ? {
                 xs: "repeat(1, 1fr)", // 2 columns for extra small screens

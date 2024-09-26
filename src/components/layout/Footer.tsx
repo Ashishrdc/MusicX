@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { MusicPlayer } from "../player/MusicPlayer";
+import { MiniPlayer } from "../player/MiniPlayer";
 
 export const Footer = () => {
   return (
@@ -9,7 +9,7 @@ export const Footer = () => {
         position: "relative",
       }}
     >
-      <MusicPlayer />
+      <MiniPlayer />
     </Box>
   );
 };

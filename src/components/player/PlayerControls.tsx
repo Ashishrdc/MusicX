@@ -8,10 +8,11 @@ import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
 import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
 import { useLayout } from "../../context/layout/LayoutContext";
+import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 
 export const PlayerControls = () => {
   const { isPlaying, play, pause, playNext, playPrevious } = usePlayer();
-  const { isSmallScreen } = useLayout(); // Hook to detect small screens
+  const { isSmallScreen, playerMode } = useLayout(); // Hook to detect small screens
 
   const handlePlayback = () => {
     if (isPlaying) pause();
@@ -26,16 +27,23 @@ export const PlayerControls = () => {
         gap: 0.25,
       }}
     >
-      {isSmallScreen ? (
-        // Render only Play/Pause button on small screens
-        <CustomButton
-          variant="contained"
-          color="secondary"
-          borderRadius={50}
-          onClick={handlePlayback}
+      {isSmallScreen && playerMode !== "fullscreen" ? (
+        <Box
+          sx={{
+            display: "flex",
+            gap: 0.5,
+          }}
         >
-          {isPlaying ? <PauseRoundedIcon /> : <PlayArrowRoundedIcon />}
-        </CustomButton>
+          <FSPlayerToggle />
+          <CustomButton
+            variant="contained"
+            color="secondary"
+            borderRadius={50}
+            onClick={handlePlayback}
+          >
+            {isPlaying ? <PauseRoundedIcon /> : <PlayArrowRoundedIcon />}
+          </CustomButton>
+        </Box>
       ) : (
         // Render full controls on larger screens
         <>

@@ -11,6 +11,7 @@ import {
   ThemeName,
   ViewMode,
   SidebarState,
+  PlayerMode,
 } from "../../constants/types/common.types";
 import { getTheme } from "../../theme";
 import { ScrollbarStyles } from "../../components/styles/ScrollbarStyles";
@@ -47,6 +48,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
   });
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchMode, setSearchMode] = useState<boolean>(false);
+  const [playerMode, setPlayerMode] = useState<PlayerMode>("mini");
 
   // Variables
   // const currentTheme = getTheme(themeName, themeMode);
@@ -79,6 +81,10 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
     setSearchMode((prevMode) => !prevMode);
   };
 
+  const toggleFSPlayer = () => {
+    playerMode === "mini" ? setPlayerMode("fullscreen") : setPlayerMode("mini");
+  };
+
   // -------------------------------SideEffects---------------------------------//
 
   // Save theme mode to local storage whenever it changes
@@ -93,7 +99,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
 
   // Handle screen size changes
   useEffect(() => {
-    if (isSmallScreen) {
+    if (isSmallScreen || playerMode === "fullscreen") {
       setSidebarState("closed");
     } else {
       // Use the stored user preference or default to "open-expanded"
@@ -104,7 +110,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
       setSearchMode(false);
       setSidebarState(userPreference || "open-expanded");
     }
-  }, [isSmallScreen, setSidebarState]);
+  }, [isSmallScreen, playerMode, setSidebarState]);
 
   // Save the user's preference when toggling on larger screens
   useEffect(() => {
@@ -124,6 +130,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
         themeName,
         viewMode,
         searchMode,
+        playerMode,
         searchQuery,
         setSearchQuery,
         toggleSidebarState,
@@ -131,6 +138,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
         selectTheme,
         toggleViewMode,
         toggleSearchMode,
+        toggleFSPlayer,
       }}
     >
       <ThemeProvider theme={currentTheme}>

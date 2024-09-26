@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import {
+  PlayerMode,
   SidebarState,
   ThemeMode,
   ThemeName,
@@ -11,6 +12,7 @@ interface LayoutContextType {
   isMediumScreen: boolean;
   isLargeScreen: boolean;
   searchMode: boolean;
+  playerMode: PlayerMode;
   themeMode: ThemeMode;
   themeName: ThemeName;
   viewMode: ViewMode;
@@ -19,6 +21,7 @@ interface LayoutContextType {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   toggleSidebarState: (newState: SidebarState) => void;
   toggleTheme: () => void;
+  toggleFSPlayer: () => void;
   selectTheme: (newTheme: ThemeName) => void;
   toggleViewMode: () => void;
   toggleSearchMode: () => void;
