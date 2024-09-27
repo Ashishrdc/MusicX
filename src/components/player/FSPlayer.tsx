@@ -2,10 +2,9 @@ import { Box, Slide } from "@mui/material";
 import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 import { useLayout } from "../../context/layout/LayoutContext";
 import { FSMobilePlayer } from "./FSMobilePlayer";
-import { FSBigPlayer } from "./FSBigPlayer";
 
 export const FSPlayer = () => {
-  const { playerMode, isSmallScreen } = useLayout();
+  const { playerMode } = useLayout();
 
   return (
     <Slide
@@ -29,7 +28,7 @@ export const FSPlayer = () => {
         }}
       >
         {/* Conditionally render mobile or large screen player */}
-        {isSmallScreen ? <FSMobilePlayer /> : <FSBigPlayer />}
+        <FSMobilePlayer />
         {/* Toggle button for fullscreen player */}
         <Box
           sx={{
