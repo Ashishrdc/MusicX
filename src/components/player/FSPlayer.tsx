@@ -21,6 +21,7 @@ export const FSPlayer = () => {
           right: 0,
           height: "100vh",
           backgroundColor: "background.paper",
+          //   backdropFilter: "blur(20px)",
           zIndex: 1400, // Higher z-index for overlay
           display: "flex",
           flexDirection: "column",

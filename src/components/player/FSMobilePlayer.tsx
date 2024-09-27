@@ -13,6 +13,7 @@ export const FSMobilePlayer = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        gap: 1,
         height: "100vh",
         padding: 2,
       }}
@@ -34,7 +35,6 @@ export const FSMobilePlayer = () => {
         />
       </Box>
 
-      {/* Player Controls */}
       <Box
         sx={{
           display: "flex",
@@ -42,45 +42,45 @@ export const FSMobilePlayer = () => {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          textOverflow: "ellipsis",
+        }}
+      >
+        <Typography
+          noWrap
+          variant="h1"
+          fontWeight={600}
+          sx={{
+            overflow: "hidden",
+          }}
+        >
+          {currentSong && he.decode(currentSong.name)}
+        </Typography>
+        <Typography
+          noWrap
+          variant="h2"
+          color="text.secondary"
+          sx={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        >
+          {currentSong?.artists.primary
+            .map((artist) => he.decode(artist.name))
+            .join(", ")}
+        </Typography>
+      </Box>
+      {/* Player Controls */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           padding: 1,
           gap: 3,
         }}
       >
         {/* Add play, pause, next, previous buttons here */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <Typography
-            noWrap
-            variant="h2"
-            fontWeight={600}
-            sx={{
-              overflow: "hidden",
-            }}
-          >
-            {currentSong && he.decode(currentSong.name)}
-          </Typography>
-          <Typography
-            noWrap
-            variant="h3"
-            color="text.secondary"
-            sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-            }}
-          >
-            {currentSong?.artists.primary
-              .map((artist) => he.decode(artist.name))
-              .join(", ")}
-          </Typography>
-        </Box>
+
         <Seekbar />
         <PlayerControls />
       </Box>
