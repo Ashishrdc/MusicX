@@ -1,11 +1,13 @@
 import { useRef } from "react";
 import { Slider, useTheme } from "@mui/material";
 import { usePlayer } from "../../context/player/PlayerContext";
+import { useLayout } from "../../context/layout/LayoutContext";
 
 export const Seekbar = () => {
   const { audioRef, currentTime, duration, setCurrentTime } = usePlayer();
-  const theme = useTheme();
+  const { playerMode } = useLayout();
   const isScrubbing = useRef(false);
+  const theme = useTheme();
 
   // Handle user scrubbing
   const handleSeek = (_event: Event, newValue: number | number[]) => {
@@ -34,12 +36,15 @@ export const Seekbar = () => {
       onChangeCommitted={handleSeekEnd}
       onMouseDown={handleSeekStart}
       sx={{
-        padding: 0,
+        padding: playerMode === "fullscreen" ? 1 : 0,
         borderRadius: 0,
         width: "100%",
         "& .MuiSlider-thumb": {
           display:
-            currentTime < 5 || currentTime > duration - 5 ? "none" : "block",
+            (currentTime < 5 || currentTime > duration - 5) &&
+            playerMode !== "fullscreen"
+              ? "none"
+              : "block",
           color: theme.palette.secondary.main,
           borderRadius: 0,
           height: 6,
@@ -61,7 +66,8 @@ export const Seekbar = () => {
           backgroundColor: theme.palette.secondary.main,
         },
         "@media (pointer: coarse)": {
-          padding: "0 !important", // Override the default padding
+          paddingY:
+            playerMode !== "fullscreen" ? "0 !important" : "10px !important", // Override the default padding
         },
       }}
     />

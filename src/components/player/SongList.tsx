@@ -47,6 +47,7 @@ export const SongList = ({ songs }: SongList) => {
                 lg: "repeat(3, 1fr)", // 5 columns for large screens
               }
             : "none",
+        transition: "all 0.3s ease",
         paddingRight: 2,
         marginBottom: 1,
         gap: 1,

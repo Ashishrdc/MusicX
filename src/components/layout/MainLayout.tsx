@@ -5,13 +5,10 @@ import { useLayout } from "../../context/layout/LayoutContext";
 import { Box, Modal, Paper, Slide } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
-import { usePlayer } from "../../context/player/PlayerContext";
-import { FSPlayer } from "../player/FSPlayer";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
-  const { sidebarState, isSmallScreen, toggleSidebarState, searchMode } =
+  const { sidebarState, isSmallScreen, searchMode, toggleSidebarState } =
     useLayout();
-  const { currentSong } = usePlayer();
 
   return (
     <Box
@@ -80,9 +77,6 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             position: "relative",
           }}
         >
-          <Box>
-            <FSPlayer />
-          </Box>
           {/* Navbar */}
           <Box
             sx={{
@@ -106,7 +100,9 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           </Box>
 
           {/* Bottom Bar */}
-          <Box>{currentSong && <Footer />}</Box>
+          <Box>
+            <Footer />
+          </Box>
         </Box>
       </Box>
     </Box>

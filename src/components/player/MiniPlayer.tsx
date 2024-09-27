@@ -7,6 +7,7 @@ import { useLayout } from "../../context/layout/LayoutContext";
 import { Seekbar } from "./Seekbar";
 import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 import he from "he";
+import { ClearQueueButton } from "../buttons/ClearQueueButton";
 
 export const MiniPlayer = () => {
   const { currentSong, currentTime, duration } = usePlayer();
@@ -132,6 +133,7 @@ export const MiniPlayer = () => {
 
             <VolumeControl />
             <FSPlayerToggle />
+            <ClearQueueButton />
           </Box>
         )}
       </Box>
