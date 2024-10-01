@@ -1,6 +1,5 @@
 import { Box, Slide } from "@mui/material";
 import { MiniPlayer } from "../player/MiniPlayer";
-import { FSPlayer } from "../player/FSPlayer";
 import { usePlayer } from "../../context/player/PlayerContext";
 import { useLayout } from "../../context/layout/LayoutContext";
 
@@ -10,7 +9,7 @@ export const Footer = () => {
   return (
     <Slide
       direction={currentSong || playerMode === "mini" ? "right" : "up"}
-      in={Boolean(currentSong) || playerMode === "fullscreen"}
+      in={Boolean(currentSong)}
       mountOnEnter
       unmountOnExit
     >
@@ -21,7 +20,6 @@ export const Footer = () => {
         }}
       >
         {playerMode === "mini" && <MiniPlayer />}
-        <FSPlayer />
       </Box>
     </Slide>
   );

@@ -5,6 +5,8 @@ import { useLayout } from "../../context/layout/LayoutContext";
 import { Box, Modal, Paper, Slide } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
+import { FSLayout } from "./FSLayout";
+import { Lyrics } from "../player/Lyrics";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { sidebarState, isSmallScreen, searchMode, toggleSidebarState } =
@@ -102,6 +104,19 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           {/* Bottom Bar */}
           <Box>
             <Footer />
+            <FSLayout>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100vh",
+                }}
+              >
+                Hello
+              </Box>
+              <Lyrics />
+            </FSLayout>
           </Box>
         </Box>
       </Box>

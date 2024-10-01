@@ -10,3 +10,9 @@ export interface Data {
   start: number;
   results: Song[];
 }
+
+export interface LyricsData {
+  lyrics: string;
+  snippet: string;
+  copyright: string;
+}

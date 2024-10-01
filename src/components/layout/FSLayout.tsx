@@ -1,9 +1,9 @@
 import { Box, Slide } from "@mui/material";
 import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 import { useLayout } from "../../context/layout/LayoutContext";
-import { FSMobilePlayer } from "./FSMobilePlayer";
+import { ReactNode } from "react";
 
-export const FSPlayer = () => {
+export const FSLayout = ({ children }: { children: ReactNode }) => {
   const { playerMode } = useLayout();
 
   return (
@@ -15,21 +15,19 @@ export const FSPlayer = () => {
     >
       <Box
         sx={{
+          inset: 0,
           position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "100vh",
           backgroundColor: "background.paper",
-          //   backdropFilter: "blur(20px)",
-          zIndex: 1400, // Higher z-index for overlay
-          display: "flex",
-          flexDirection: "column",
-          padding: 2,
         }}
       >
-        {/* Conditionally render mobile or large screen player */}
-        <FSMobilePlayer />
+        <Box
+          sx={{
+            overflowY: "auto",
+            height: "100vh",
+          }}
+        >
+          {children}
+        </Box>
         {/* Toggle button for fullscreen player */}
         <Box
           sx={{
