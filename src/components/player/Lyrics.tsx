@@ -51,7 +51,7 @@ export const Lyrics = React.memo(() => {
   return (
     <>
       {currentSong?.hasLyrics && lyricsData ? (
-        <Box sx={{ padding: 2, overflowY: "auto", height: "100%" }}>
+        <Box sx={{ overflowY: "auto", height: "100%" }}>
           {/* Title */}
           <Typography variant="h2" fontWeight={600}>
             Lyrics for {currentSong.name}

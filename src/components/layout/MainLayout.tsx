@@ -121,6 +121,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                   height: "100%",
                   scrollSnapAlign: "start",
                   backgroundColor: "background.paper",
+                  padding: 2,
                 }}
               >
                 <Lyrics />
