@@ -111,11 +111,20 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: "100vh",
+                  scrollSnapAlign: "start",
                 }}
               >
                 Hello
               </Box>
-              <Lyrics />
+              <Box
+                sx={{
+                  height: "100%",
+                  scrollSnapAlign: "start",
+                  backgroundColor: "background.paper",
+                }}
+              >
+                <Lyrics />
+              </Box>
             </FSLayout>
           </Box>
         </Box>

@@ -22,7 +22,7 @@ const Wave = styled(Box)(({ theme }) => ({
 
 export const Waveform = () => (
   <WaveformContainer>
-    {[...Array(10)].map((_, i) => (
+    {[...Array(6)].map((_, i) => (
       <Wave key={i} style={{ animationDelay: `${i * 0.05}s` }} />
     ))}
   </WaveformContainer>

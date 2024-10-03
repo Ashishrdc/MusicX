@@ -8,6 +8,7 @@ import { Seekbar } from "./Seekbar";
 import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 import he from "he";
 import { ClearQueueButton } from "../buttons/ClearQueueButton";
+import { LyricsToggle } from "../buttons/LyricsToggle";
 
 export const MiniPlayer = () => {
   const { currentSong, currentTime, duration } = usePlayer();
@@ -132,8 +133,9 @@ export const MiniPlayer = () => {
             </Typography>
 
             <VolumeControl />
-            <FSPlayerToggle />
+            <LyricsToggle />
             <ClearQueueButton />
+            <FSPlayerToggle />
           </Box>
         )}
       </Box>

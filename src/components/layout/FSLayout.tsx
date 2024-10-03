@@ -4,7 +4,7 @@ import { useLayout } from "../../context/layout/LayoutContext";
 import { ReactNode } from "react";
 
 export const FSLayout = ({ children }: { children: ReactNode }) => {
-  const { playerMode } = useLayout();
+  const { playerMode, isSmallScreen } = useLayout();
 
   return (
     <Slide
@@ -23,7 +23,9 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
         <Box
           sx={{
             overflowY: "auto",
-            height: "100vh",
+            height: isSmallScreen ? "100dvh" : "100vh",
+            scrollBehavior: "smooth",
+            scrollSnapType: "y mandatory",
           }}
         >
           {children}
@@ -32,8 +34,8 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
         <Box
           sx={{
             position: "absolute",
-            right: 0,
-            bottom: 0,
+            right: 10,
+            bottom: 10,
           }}
         >
           <FSPlayerToggle />

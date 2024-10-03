@@ -9,7 +9,7 @@ const MusicNotesContainer = styled(Box)(() => ({
 
 const Note = styled(Box)(({ theme }) => ({
   width: 20,
-  height: 60,
+  height: 50,
   backgroundColor: theme.palette.primary.main,
   animation: "bounce 0.5s infinite alternate",
   "@keyframes bounce": {

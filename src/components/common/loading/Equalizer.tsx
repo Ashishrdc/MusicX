@@ -12,11 +12,12 @@ const EqualizerContainer = styled(Box)(() => ({
 const Bar = styled(Box)(({ theme }) => ({
   width: 10,
   height: 20,
+  margin: "0 1px",
   backgroundColor: theme.palette.primary.main,
   animation: "equalizer 1s infinite ease-in-out",
   "@keyframes equalizer": {
     "0%": { height: 10 },
-    "50%": { height: 20 },
+    "50%": { height: 30 },
     "100%": { height: 10 },
   },
 }));

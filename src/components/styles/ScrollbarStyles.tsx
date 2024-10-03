@@ -1,4 +1,5 @@
 import { GlobalStyles, useTheme } from "@mui/material";
+import { useLayout } from "../../context/layout/LayoutContext";
 
 interface ScrollbarProps {
   width?: string | number;
@@ -12,11 +13,13 @@ export const ScrollbarStyles = ({
   borderRadius,
 }: ScrollbarProps) => {
   const theme = useTheme();
+  const { playerMode } = useLayout();
 
   return (
     <GlobalStyles
       styles={{
         "::-webkit-scrollbar": {
+          display: playerMode === "fullscreen" ? "none" : "block",
           width: width != undefined ? width : 8,
         },
         "::-webkit-scrollbar-thumb": {
