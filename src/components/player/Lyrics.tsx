@@ -10,6 +10,7 @@ import {
   LyricsData,
 } from "../../constants/interfaces/api.responses";
 import { useLayout } from "../../context/layout/LayoutContext";
+import he from "he";
 
 export const Lyrics = React.memo(() => {
   const { currentSong } = usePlayer();
@@ -64,7 +65,7 @@ export const Lyrics = React.memo(() => {
           >
             {playerMode === "fullscreen" && (
               <Typography variant="h2" fontWeight={600}>
-                Lyrics for {currentSong.name}
+                Lyrics for {he.decode(currentSong.name)}
               </Typography>
             )}
 
