@@ -8,6 +8,7 @@ export const Home = () => {
         display: "flex",
         flexDirection: "column",
         height: "100%",
+        width: "100%",
         overflowY: "auto",
       }}
     >

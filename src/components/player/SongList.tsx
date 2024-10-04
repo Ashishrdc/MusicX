@@ -48,7 +48,7 @@ export const SongList = ({ songs }: SongList) => {
               }
             : "none",
         transition: "all 0.3s ease",
-        paddingRight: 2,
+        paddingRight: 1,
         marginBottom: 1,
         gap: 1,
       }}

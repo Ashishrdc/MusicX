@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { CustomButton } from "./CustomButton";
-import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
 import { Lyrics } from "../player/Lyrics";
 import { CustomModal } from "../modal/CustomModal";
 import { usePlayer } from "../../context/player/PlayerContext";
+import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
+import he from "he";
 
 export const LyricsToggle = () => {
   const { currentSong } = usePlayer();
@@ -15,7 +16,7 @@ export const LyricsToggle = () => {
   return (
     <>
       <CustomModal
-        title={currentSong?.name || "No Title"}
+        title={(currentSong && he.decode(currentSong.name)) || "No Title"}
         open={isOpen}
         onClose={handleClick}
       >

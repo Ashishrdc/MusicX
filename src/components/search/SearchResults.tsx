@@ -33,7 +33,7 @@ export const SearchResult = () => {
   }, [searchQuery]);
 
   return (
-    <Box sx={{ height: "100%", overflowY: "auto" }}>
+    <Box sx={{ height: "100%", width:"100%", overflowY: "auto" }}>
       {songResult.length > 0 && (
         <Box
           sx={{

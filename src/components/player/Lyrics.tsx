@@ -9,9 +9,11 @@ import {
   LyricsApiResponse,
   LyricsData,
 } from "../../constants/interfaces/api.responses";
+import { useLayout } from "../../context/layout/LayoutContext";
 
 export const Lyrics = React.memo(() => {
   const { currentSong } = usePlayer();
+  const { playerMode } = useLayout();
   const [lyricsData, setLyricsData] = useState<LyricsData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -53,14 +55,24 @@ export const Lyrics = React.memo(() => {
       {currentSong?.hasLyrics && lyricsData ? (
         <Box sx={{ overflowY: "auto", height: "100%" }}>
           {/* Title */}
-          <Typography variant="h2" fontWeight={600}>
-            Lyrics for {currentSong.name}
-          </Typography>
+          <Box
+            sx={{
+              position: playerMode === "fullscreen" ? "sticky" : "relative",
+              top: 0,
+              backgroundColor: "background.paper",
+            }}
+          >
+            {playerMode === "fullscreen" && (
+              <Typography variant="h2" fontWeight={600}>
+                Lyrics for {currentSong.name}
+              </Typography>
+            )}
 
-          {/* Lyrics Snippet */}
-          <Typography variant="h6" gutterBottom>
-            {lyricsData?.snippet}
-          </Typography>
+            {/* Lyrics Snippet */}
+            <Typography variant="h6" fontStyle={"italic"} gutterBottom>
+              {lyricsData?.snippet}
+            </Typography>
+          </Box>
 
           <Divider sx={{ marginY: 2 }} />
 
@@ -84,9 +96,14 @@ export const Lyrics = React.memo(() => {
           />
         </Box>
       ) : (
-        <CenteredFlexBox>
-          <Typography variant="h1" fontWeight={600}>
-            Sorry! Lyrics isn't available.🥺
+        <CenteredFlexBox textAlign={"center"} flexDirection={"column"} gap={1}>
+          <Typography variant="h1">😔</Typography>
+          <Typography variant="h3" fontWeight={600}>
+            Oops! The lyrics for this song aren't available right now.
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            We're working on getting it for you. In the meantime, enjoy the
+            music!
           </Typography>
         </CenteredFlexBox>
       )}
