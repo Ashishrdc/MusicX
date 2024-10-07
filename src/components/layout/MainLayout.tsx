@@ -35,7 +35,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
     sections.unshift({
       id: "player",
       title: <PlayArrowRoundedIcon />,
-      component: <MobilePlayer />,
+      component: <FSPlayer />,
     });
 
   return (
@@ -136,6 +136,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                   display: "flex",
                   height: "100%",
                   width: "100%",
+                  padding: isSmallScreen ? 0.5 : 1,
                 }}
               >
                 {!isSmallScreen && <FSPlayer />}

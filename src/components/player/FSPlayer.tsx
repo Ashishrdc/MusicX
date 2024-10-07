@@ -31,7 +31,7 @@ export const FSPlayer = () => {
       >
         <img
           src={currentSong?.image[2].url}
-          alt="Album cover"
+          alt={currentSong?.name}
           style={{
             maxWidth: "90%",
             maxHeight: "100%",
