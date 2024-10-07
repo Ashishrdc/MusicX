@@ -22,10 +22,13 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
       >
         <Box
           sx={{
+            display: "flex",
+            flexDirection: isSmallScreen ? "column" : "row",
             overflowY: "auto",
-            height: isSmallScreen ? "100dvh" : "100vh",
             scrollBehavior: "smooth",
             scrollSnapType: "y mandatory",
+            height: "100dvh",
+            gap: 2,
           }}
         >
           {children}

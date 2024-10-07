@@ -14,7 +14,6 @@ export const RectangularSongCard = ({ song }: SongCardProps) => {
         justifyContent: "center",
         height: 60,
         width: "100%",
-        marginLeft: 1,
         overflow: "hidden",
         transition: "all 0.3s ease",
         "&:hover": {
@@ -35,7 +34,6 @@ export const RectangularSongCard = ({ song }: SongCardProps) => {
           sx={{
             height: "100%",
             width: "100%",
-            borderRadius: 2,
             overflow: "hidden",
             position: "relative",
           }}

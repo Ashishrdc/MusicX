@@ -7,10 +7,36 @@ import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
 import { FSLayout } from "./FSLayout";
 import { Lyrics } from "../player/Lyrics";
+import { FSSections } from "./FSSections";
+import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
+import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
+import { FSPlayer } from "../player/FSPlayer";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { sidebarState, isSmallScreen, searchMode, toggleSidebarState } =
     useLayout();
+
+  const sections = [
+    {
+      id: "lyrics",
+      title: <LyricsRoundedIcon />,
+      component: <Lyrics />,
+    },
+    {
+      id: "section3",
+      title: <QueueMusicRoundedIcon />,
+      component: <CenteredFlexBox>Section 3</CenteredFlexBox>,
+    },
+  ];
+
+  if (isSmallScreen)
+    sections.unshift({
+      id: "player",
+      title: <PlayArrowRoundedIcon />,
+      component: <MobilePlayer />,
+    });
 
   return (
     <Box
@@ -75,8 +101,8 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             flex: 1,
             display: "flex",
             flexDirection: "column",
-            height: isSmallScreen ? "100dvh" : "100vh",
             position: "relative",
+            height: "100dvh",
           }}
         >
           {/* Navbar */}
@@ -108,23 +134,12 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100vh",
-                  scrollSnapAlign: "start",
-                }}
-              >
-                Hello
-              </Box>
-              <Box
-                sx={{
                   height: "100%",
-                  scrollSnapAlign: "start",
-                  backgroundColor: "background.paper",
-                  padding: 2,
+                  width: "100%",
                 }}
               >
-                <Lyrics />
+                {!isSmallScreen && <FSPlayer />}
+                <FSSections sections={sections} />
               </Box>
             </FSLayout>
           </Box>

@@ -36,7 +36,7 @@ export const Seekbar = () => {
       onChangeCommitted={handleSeekEnd}
       onMouseDown={handleSeekStart}
       sx={{
-        padding: playerMode === "fullscreen" ? 1 : 0,
+        paddingY: playerMode === "fullscreen" ? 1 : 0,
         borderRadius: 0,
         width: "100%",
         "& .MuiSlider-thumb": {

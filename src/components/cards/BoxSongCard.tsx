@@ -20,8 +20,7 @@ export const BoxSongCard: React.FC<SongCardProps> = ({ song }) => {
         height: "fit-content",
         overflow: "hidden",
         position: "relative",
-        marginLeft: 0.5,
-        marginBottom: 1,
+        marginBottom: 0.5,
         borderRadius: 1,
         transition: "all 0.3s ease",
         "&:hover": {

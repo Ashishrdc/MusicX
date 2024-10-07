@@ -14,6 +14,9 @@ export const PlayerControls = () => {
   const { isPlaying, play, pause, playNext, playPrevious } = usePlayer();
   const { isSmallScreen, playerMode } = useLayout(); // Hook to detect small screens
 
+  const fontSize =
+    playerMode === "fullscreen" ? { xs: 35, sm: 40, md: 45 } : {};
+
   const handlePlayback = () => {
     if (isPlaying) pause();
     else play();
@@ -49,7 +52,7 @@ export const PlayerControls = () => {
         <>
           <ShuffleToggle />
           <CustomButton onClick={playPrevious} hover={false}>
-            <SkipPreviousRoundedIcon />
+            <SkipPreviousRoundedIcon sx={{ fontSize: fontSize }} />
           </CustomButton>
           <CustomButton
             variant="contained"
@@ -57,10 +60,14 @@ export const PlayerControls = () => {
             borderRadius={50}
             onClick={handlePlayback}
           >
-            {isPlaying ? <PauseRoundedIcon /> : <PlayArrowRoundedIcon />}
+            {isPlaying ? (
+              <PauseRoundedIcon sx={{ fontSize: fontSize }} />
+            ) : (
+              <PlayArrowRoundedIcon sx={{ fontSize: fontSize }} />
+            )}
           </CustomButton>
           <CustomButton onClick={playNext} hover={false}>
-            <SkipNextRoundedIcon />
+            <SkipNextRoundedIcon sx={{ fontSize: fontSize }} />
           </CustomButton>
           <RepeatModeToggle />
         </>

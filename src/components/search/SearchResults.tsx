@@ -33,17 +33,18 @@ export const SearchResult = () => {
   }, [searchQuery]);
 
   return (
-    <Box sx={{ height: "100%", width:"100%", overflowY: "auto" }}>
+    <Box sx={{ height: "100%", width: "100%", overflowY: "auto" }}>
       {songResult.length > 0 && (
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            p: 1,
+            marginX: 1,
+            paddingX: 0.5,
           }}
         >
-          <Typography variant="body1" sx={{ fontStyle: "italic" }}>
+          <Typography variant="h6" sx={{ fontStyle: "italic" }}>
             {searchQuery.length > 0 && `results for ${searchQuery.trim()},`}
           </Typography>
           <ViewToggle />
