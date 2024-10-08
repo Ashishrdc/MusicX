@@ -5,38 +5,10 @@ import { useLayout } from "../../context/layout/LayoutContext";
 import { Box, Modal, Paper, Slide } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
-import { FSLayout } from "./FSLayout";
-import { Lyrics } from "../player/Lyrics";
-import { FSSections } from "./FSSections";
-import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
-import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
-import { FSPlayer } from "../player/FSPlayer";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { sidebarState, isSmallScreen, searchMode, toggleSidebarState } =
     useLayout();
-
-  const sections = [
-    {
-      id: "lyrics",
-      title: <LyricsRoundedIcon />,
-      component: <Lyrics />,
-    },
-    {
-      id: "section3",
-      title: <QueueMusicRoundedIcon />,
-      component: <CenteredFlexBox>Section 3</CenteredFlexBox>,
-    },
-  ];
-
-  if (isSmallScreen)
-    sections.unshift({
-      id: "player",
-      title: <PlayArrowRoundedIcon />,
-      component: <FSPlayer />,
-    });
 
   return (
     <Box
@@ -130,19 +102,6 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           {/* Bottom Bar */}
           <Box>
             <Footer />
-            <FSLayout>
-              <Box
-                sx={{
-                  display: "flex",
-                  height: "100%",
-                  width: "100%",
-                  padding: isSmallScreen ? 0.5 : 1,
-                }}
-              >
-                {!isSmallScreen && <FSPlayer />}
-                <FSSections sections={sections} />
-              </Box>
-            </FSLayout>
           </Box>
         </Box>
       </Box>

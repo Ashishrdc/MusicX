@@ -15,6 +15,7 @@ export const formatSecondsToTime = (seconds: number): string => {
       .padStart(2, "0")}`;
   }
 };
+
 export const createGradient = (
   primaryColor: string,
   rotation: string = "90deg"

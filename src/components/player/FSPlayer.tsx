@@ -52,7 +52,7 @@ export const FSPlayer = () => {
       >
         {/* Song Title */}
         <Typography
-          variant="h2"
+          variant="h4"
           fontWeight={600}
           sx={{
             display: "-webkit-box",
@@ -103,10 +103,10 @@ export const FSPlayer = () => {
             width: "100%",
           }}
         >
-          <Typography variant="body1" fontWeight={600} color="text.secondary">
+          <Typography variant="body2" fontWeight={600} color="text.secondary">
             {formatSecondsToTime(currentTime)}
           </Typography>
-          <Typography variant="body1" fontWeight={600} color="text.secondary">
+          <Typography variant="body2" fontWeight={600} color="text.secondary">
             {formatSecondsToTime(duration)}
           </Typography>
         </Box>

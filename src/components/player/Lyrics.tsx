@@ -59,8 +59,9 @@ export const Lyrics = React.memo(() => {
           <Box
             sx={{
               position: playerMode === "fullscreen" ? "sticky" : "relative",
-              top: 0,
+              paddingX: 1,
               backgroundColor: "background.paper",
+              top: 0,
             }}
           >
             {playerMode === "fullscreen" && (
@@ -78,23 +79,22 @@ export const Lyrics = React.memo(() => {
           <Divider sx={{ marginY: 2 }} />
 
           {/* Full Lyrics */}
-          <Box sx={{ whiteSpace: "pre-line" }}>
+          <Box sx={{ paddingX: 1, whiteSpace: "pre-line" }}>
             <Typography
               variant="body1"
               dangerouslySetInnerHTML={{ __html: lyricsData.lyrics }}
             />
+
+            {/* Copyright */}
+            <Divider sx={{ marginY: 2 }} />
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              dangerouslySetInnerHTML={{
+                __html: lyricsData.copyright,
+              }}
+            />
           </Box>
-
-          {/* Copyright */}
-          <Divider sx={{ marginY: 2 }} />
-
-          <Typography
-            variant="caption"
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: lyricsData.copyright,
-            }}
-          />
         </Box>
       ) : (
         <CenteredFlexBox textAlign={"center"} flexDirection={"column"} gap={1}>

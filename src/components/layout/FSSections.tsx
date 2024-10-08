@@ -1,8 +1,14 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Box, Slide } from "@mui/material";
+import { Box, Slide, useTheme } from "@mui/material";
 import { CustomButton } from "../buttons/CustomButton";
 import { useLayout } from "../../context/layout/LayoutContext";
-
+import { createGradient } from "../../util/helperFunctions";
+import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
+import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
+import { Lyrics } from "../player/Lyrics";
+import { FSPlayer } from "../player/FSPlayer";
 interface Section {
   id: string;
   title: ReactNode;
@@ -10,12 +16,37 @@ interface Section {
 }
 
 interface FSSectionsProps {
-  sections: Section[];
+  sections?: Section[];
 }
 
 export const FSSections = ({ sections }: FSSectionsProps) => {
-  const [activeSection, setActiveSection] = useState<string>(sections[0].id);
+  const [activeSection, setActiveSection] = useState<string>("");
   const { isSmallScreen } = useLayout();
+  const theme = useTheme();
+
+  const defaultSections = [
+    {
+      id: "lyrics",
+      title: <LyricsRoundedIcon />,
+      component: <Lyrics />,
+    },
+    {
+      id: "section3",
+      title: <QueueMusicRoundedIcon />,
+      component: <CenteredFlexBox>Section 3</CenteredFlexBox>,
+    },
+  ];
+
+  if (!sections) {
+    sections = defaultSections;
+  }
+
+  if (isSmallScreen)
+    sections.unshift({
+      id: "player",
+      title: <PlayArrowRoundedIcon />,
+      component: <FSPlayer />,
+    });
 
   const handleToggleSection = (id: string) => {
     setActiveSection(id);
@@ -23,7 +54,8 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
 
   useEffect(() => {
     setActiveSection(sections[0].id);
-  }, [isSmallScreen, sections]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSmallScreen]);
 
   return (
     <Box
@@ -48,7 +80,6 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
             direction={!isSmallScreen ? "up" : "left"}
             in={activeSection === section.id}
             mountOnEnter
-            unmountOnExit
           >
             <Box
               sx={{
@@ -71,10 +102,11 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
           flexDirection: isSmallScreen ? "row" : "column",
           height: isSmallScreen ? "fit-content" : "100%",
           width: isSmallScreen ? "100%" : "fit-content",
-          alignItems: "center",
           justifyContent: "center",
-          gap: 5,
+          alignItems: "center",
+          backgroundColor: createGradient(theme.palette.secondary.main),
           padding: 1,
+          gap: 5,
         }}
       >
         {sections.map((section) => (

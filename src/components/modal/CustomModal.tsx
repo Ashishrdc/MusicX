@@ -31,6 +31,7 @@ export const CustomModal = ({
             borderRadius: 2,
             display: "flex",
             flexDirection: "column",
+            overflow: "hidden",
             padding: 2,
           }}
         >
@@ -45,7 +46,7 @@ export const CustomModal = ({
             <Typography variant="h4" fontWeight={600}>
               {title ? title : ""}
             </Typography>
-            <CustomButton onClick={onClose}>
+            <CustomButton color="error" onClick={onClose}>
               <CloseIcon />
             </CustomButton>
           </Box>
