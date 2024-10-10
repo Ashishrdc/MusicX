@@ -37,8 +37,8 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
         <Box
           sx={{
             position: "absolute",
+            top: 10,
             right: 10,
-            bottom: 10,
           }}
         >
           <FSPlayerToggle />

@@ -1,28 +1,29 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Box, Slide, useTheme } from "@mui/material";
+import { Box, Slide, Tabs, Tab } from "@mui/material";
 import { CustomButton } from "../buttons/CustomButton";
 import { useLayout } from "../../context/layout/LayoutContext";
-import { createGradient } from "../../util/helperFunctions";
 import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
+import { Lyrics } from "../player/Lyrics";
+import { FSPlayer } from "../player/FSPlayer";
+
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
-import { Lyrics } from "../player/Lyrics";
-import { FSPlayer } from "../player/FSPlayer";
+
 interface Section {
   id: string;
-  title: ReactNode;
+  title: ReactNode | string;
   component: ReactNode;
 }
 
 interface FSSectionsProps {
   sections?: Section[];
+  tabs?: boolean; // New prop to control rendering of buttons or tabs
 }
 
-export const FSSections = ({ sections }: FSSectionsProps) => {
+export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
   const [activeSection, setActiveSection] = useState<string>("");
   const { isSmallScreen } = useLayout();
-  const theme = useTheme();
 
   const defaultSections = [
     {
@@ -31,7 +32,7 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
       component: <Lyrics />,
     },
     {
-      id: "section3",
+      id: "queue",
       title: <QueueMusicRoundedIcon />,
       component: <CenteredFlexBox>Section 3</CenteredFlexBox>,
     },
@@ -85,6 +86,7 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
               sx={{
                 width: "100%",
                 height: "100%",
+                padding: 1,
                 position:
                   activeSection === section.id ? "relative" : "absolute",
               }}
@@ -95,7 +97,7 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
         ))}
       </Box>
 
-      {/* Bottom Row: Toggle Buttons */}
+      {/* Bottom Row: Toggle Buttons or Tabs */}
       <Box
         sx={{
           display: "flex",
@@ -104,21 +106,42 @@ export const FSSections = ({ sections }: FSSectionsProps) => {
           width: isSmallScreen ? "100%" : "fit-content",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: createGradient(theme.palette.secondary.main),
-          padding: 1,
+          padding: tabs ? 0 : 1,
           gap: 5,
         }}
       >
-        {sections.map((section) => (
-          <CustomButton
-            key={section.id}
-            borderRadius={25}
-            variant={activeSection === section.id ? "contained" : "outlined"}
-            onClick={() => handleToggleSection(section.id)}
+        {tabs ? (
+          <Tabs
+            variant={sections.length > 5 ? "scrollable" : "fullWidth"}
+            orientation={isSmallScreen ? "horizontal" : "vertical"}
+            value={activeSection}
+            onChange={(_event, newValue) => handleToggleSection(newValue)}
+            sx={{
+              width: isSmallScreen ? "100%" : "auto",
+            }}
           >
-            {section.title}
-          </CustomButton>
-        ))}
+            {sections.map((section) => (
+              <Tab
+                key={section.id}
+                value={section.id}
+                label={section.title}
+                sx={{ flexGrow: 1, minWidth: 0 }}
+              />
+            ))}
+          </Tabs>
+        ) : (
+          // Render Buttons by default
+          sections.map((section) => (
+            <CustomButton
+              key={section.id}
+              borderRadius={25}
+              variant={activeSection === section.id ? "contained" : "outlined"}
+              onClick={() => handleToggleSection(section.id)}
+            >
+              {section.title}
+            </CustomButton>
+          ))
+        )}
       </Box>
     </Box>
   );

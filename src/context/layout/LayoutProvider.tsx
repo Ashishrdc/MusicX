@@ -143,7 +143,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
     >
       <ThemeProvider theme={currentTheme}>
         <CssBaseline enableColorScheme />
-        <ScrollbarStyles width={8} />
+        <ScrollbarStyles width={8} borderRadius={2} />
         {children}
       </ThemeProvider>
     </LayoutContext.Provider>

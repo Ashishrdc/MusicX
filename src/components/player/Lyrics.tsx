@@ -59,7 +59,6 @@ export const Lyrics = React.memo(() => {
           <Box
             sx={{
               position: playerMode === "fullscreen" ? "sticky" : "relative",
-              paddingX: 1,
               backgroundColor: "background.paper",
               top: 0,
             }}
@@ -79,7 +78,7 @@ export const Lyrics = React.memo(() => {
           <Divider sx={{ marginY: 2 }} />
 
           {/* Full Lyrics */}
-          <Box sx={{ paddingX: 1, whiteSpace: "pre-line" }}>
+          <Box sx={{ whiteSpace: "pre-line" }}>
             <Typography
               variant="body1"
               dangerouslySetInnerHTML={{ __html: lyricsData.lyrics }}

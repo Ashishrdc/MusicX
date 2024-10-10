@@ -42,8 +42,7 @@ export const Footer = () => {
             <Box
               sx={{
                 display: "flex",
-                width: "60%",
-                maxWidth: "70%",
+                width: "80%",
               }}
             >
               <FSPlayer />
@@ -60,7 +59,7 @@ export const Footer = () => {
             </Box>
           )}
           <Box sx={{ display: "flex", width: "100%", borderRadius: 5 }}>
-            <FSSections />
+            <FSSections tabs />
           </Box>
         </Box>
       </FSLayout>

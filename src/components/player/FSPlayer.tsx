@@ -6,7 +6,15 @@ import he from "he";
 import { formatSecondsToTime } from "../../util/helperFunctions";
 
 export const FSPlayer = () => {
-  const { currentSong, currentTime, duration } = usePlayer();
+  const {
+    currentSong,
+    currentTime,
+    duration,
+    // getNextSong
+  } = usePlayer();
+
+  // const nextSong = getNextSong();
+
   return (
     <Box
       sx={{
