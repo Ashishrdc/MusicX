@@ -33,8 +33,8 @@ export const FSPlayer = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: "100%",
           maxHeight: "50vh",
+          width: "100%",
         }}
       >
         <img
@@ -52,9 +52,9 @@ export const FSPlayer = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          overflow: "hidden",
+          justifyContent: "center",
           textAlign: "center",
-          maxHeight: 150,
+          height: 150,
           maxWidth: "100%",
         }}
       >

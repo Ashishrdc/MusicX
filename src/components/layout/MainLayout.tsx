@@ -80,12 +80,15 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           {/* Navbar */}
           <Box
             sx={{
-              padding: isSmallScreen ? 0.5 : 1,
+              display: "flex",
               width: "100%",
+              alignItems: "center",
+              height: isSmallScreen ? 64 : 80,
+              transition: "all 0.3s ease",
               top: 0,
             }}
           >
-            {isSmallScreen && searchMode ? <SearchBar /> : <Navbar />}
+            {searchMode ? <SearchBar /> : <Navbar />}
           </Box>
 
           {/* Main Content */}
@@ -93,7 +96,6 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             sx={{
               flex: 1,
               overflowY: "auto",
-              padding: isSmallScreen ? 1 : 2,
             }}
           >
             {children}

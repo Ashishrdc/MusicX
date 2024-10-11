@@ -43,12 +43,29 @@ export const CustomModal = ({
               marginBottom: 1,
             }}
           >
-            <Typography variant="h4" fontWeight={600}>
-              {title ? title : ""}
-            </Typography>
-            <CustomButton color="error" onClick={onClose}>
-              <CloseIcon />
-            </CustomButton>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "fit-content",
+                height: "100%",
+              }}
+            >
+              <Typography variant="h4" fontWeight={600}>
+                {title ? title : ""}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                width: "fit-content",
+                height: "100%",
+              }}
+            >
+              <CustomButton color="error" onClick={onClose}>
+                <CloseIcon />
+              </CustomButton>
+            </Box>
           </Box>
 
           {children}

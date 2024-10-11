@@ -8,22 +8,30 @@ import { SearchToggle } from "../buttons/SearchToggle";
 
 export const Navbar = () => {
   const { isSmallScreen } = useLayout();
+
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
         transition: "all 0.3s ease",
+        height: isSmallScreen ? 64 : "100%",
+        paddingX: 0.5,
         width: "100%",
-        height: 64,
         gap: 2,
       }}
     >
-      {/* gradient="linear-gradient(90deg, orange, #ff6347)" */}
-      <Box>{(!isSmallScreen && <SidebarToggle />) || <CustomTitle />}</Box>
-      <Box sx={{ width: "100%" }}>{!isSmallScreen && <SearchBar />}</Box>
-      <Box sx={{ display: "flex", gap: 0.5 }}>
+      {/* SidebarToggle or Title based on screen size */}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {!isSmallScreen ? <SidebarToggle /> : <CustomTitle />}
+      </Box>
+
+      {/* SearchBar (hidden on small screens) */}
+      {!isSmallScreen && <SearchBar />}
+
+      {/* Right-side controls */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
         {isSmallScreen && <SearchToggle />}
         <ThemeToggle />
         {isSmallScreen && <SidebarToggle />}
