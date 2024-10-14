@@ -41,12 +41,13 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
     sections = defaultSections;
   }
 
-  if (isSmallScreen)
+  if (isSmallScreen) {
     sections.unshift({
       id: "now playing",
       title: <PlayArrowRoundedIcon />,
       component: <FSPlayer />,
     });
+  }
 
   // Initialize with the first section's id
   const [activeSection, setActiveSection] = useState<string>(sections[0].id);
