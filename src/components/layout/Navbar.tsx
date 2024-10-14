@@ -17,7 +17,6 @@ export const Navbar = () => {
         justifyContent: "space-between",
         transition: "all 0.3s ease",
         height: isSmallScreen ? 64 : "100%",
-        paddingX: 0.5,
         width: "100%",
         gap: 2,
       }}

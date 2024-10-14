@@ -5,6 +5,7 @@ import { CustomModal } from "../modal/CustomModal";
 import { usePlayer } from "../../context/player/PlayerContext";
 import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
 import he from "he";
+import { Box } from "@mui/material";
 
 export const LyricsToggle = () => {
   const { currentSong } = usePlayer();
@@ -14,7 +15,7 @@ export const LyricsToggle = () => {
   };
 
   return (
-    <>
+    <Box>
       <CustomModal
         title={(currentSong && he.decode(currentSong.name)) || "No Title"}
         open={isOpen}
@@ -25,6 +26,6 @@ export const LyricsToggle = () => {
       <CustomButton onClick={handleClick}>
         <LyricsRoundedIcon fontSize="small" />
       </CustomButton>
-    </>
+    </Box>
   );
 };

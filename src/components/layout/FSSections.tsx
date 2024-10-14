@@ -22,7 +22,6 @@ interface FSSectionsProps {
 }
 
 export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
-  const [activeSection, setActiveSection] = useState<string>("");
   const { isSmallScreen } = useLayout();
 
   const defaultSections = [
@@ -44,10 +43,13 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
 
   if (isSmallScreen)
     sections.unshift({
-      id: "player",
+      id: "now playing",
       title: <PlayArrowRoundedIcon />,
       component: <FSPlayer />,
     });
+
+  // Initialize with the first section's id
+  const [activeSection, setActiveSection] = useState<string>(sections[0].id);
 
   const handleToggleSection = (id: string) => {
     setActiveSection(id);

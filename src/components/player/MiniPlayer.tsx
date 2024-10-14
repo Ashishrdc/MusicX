@@ -45,7 +45,8 @@ export const MiniPlayer = () => {
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            overflow: "hidden", // Ensures the content won't overflow
+            overflow: "hidden",
+            minWidth: 50,
             gap: 1,
           }}
         >
@@ -55,7 +56,7 @@ export const MiniPlayer = () => {
               width: 50,
               borderRadius: 1,
               overflow: "hidden",
-              flexShrink: 0, // Ensures that image doesn't shrink
+              flexShrink: 0,
             }}
           >
             <img
@@ -121,7 +122,7 @@ export const MiniPlayer = () => {
             }}
           >
             <Typography
-              noWrap
+              noWrap={isSmallScreen}
               variant="subtitle2"
               color="text.secondary"
               fontWeight={600}
@@ -130,7 +131,6 @@ export const MiniPlayer = () => {
                 duration
               )}`}
             </Typography>
-
             <VolumeControl />
             <LyricsToggle />
             <FSPlayerToggle />

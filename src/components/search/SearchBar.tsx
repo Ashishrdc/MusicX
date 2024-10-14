@@ -47,7 +47,6 @@ export const SearchBar = () => {
             display: "flex",
             alignItems: "center",
             width: "100%",
-            padding: 1,
           }}
         >
           <TextField

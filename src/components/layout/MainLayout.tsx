@@ -78,24 +78,28 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           }}
         >
           {/* Navbar */}
-          <Box
+          <Paper
+            elevation={1}
+            square
             sx={{
               display: "flex",
-              width: "100%",
               alignItems: "center",
-              height: isSmallScreen ? 64 : 80,
               transition: "all 0.3s ease",
+              height: isSmallScreen ? 64 : 80,
+              width: "100%",
+              padding: 1,
               top: 0,
             }}
           >
             {searchMode ? <SearchBar /> : <Navbar />}
-          </Box>
+          </Paper>
 
           {/* Main Content */}
           <Box
             sx={{
               flex: 1,
               overflowY: "auto",
+              padding: 1,
             }}
           >
             {children}
