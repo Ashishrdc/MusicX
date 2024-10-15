@@ -26,7 +26,7 @@ export const CustomModal = ({
             left: "50%",
             transform: "translate(-50%, -50%)",
             height: "80%",
-            width: { xs: "90%", sm: "70%", md: "40%" },
+            width: { sm: "50%", md: "40%" },
             backgroundColor: "background.paper",
             borderRadius: 2,
             display: "flex",

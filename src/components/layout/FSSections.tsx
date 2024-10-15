@@ -33,31 +33,47 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
     {
       id: "queue",
       title: <QueueMusicRoundedIcon />,
-      component: <CenteredFlexBox>Section 3</CenteredFlexBox>,
+      component: <CenteredFlexBox>Queue Content</CenteredFlexBox>,
     },
   ];
 
-  if (!sections) {
-    sections = defaultSections;
-  }
-
-  if (isSmallScreen) {
-    sections.unshift({
-      id: "now playing",
-      title: <PlayArrowRoundedIcon />,
-      component: <FSPlayer />,
-    });
-  }
+  // Use default sections if none are provided
+  const [currentSections, setCurrentSections] = useState<Section[]>(
+    sections || defaultSections
+  );
 
   // Initialize with the first section's id
-  const [activeSection, setActiveSection] = useState<string>(sections[0].id);
+  const [activeSection, setActiveSection] = useState<string>(
+    currentSections[0].id
+  );
 
   const handleToggleSection = (id: string) => {
     setActiveSection(id);
   };
 
   useEffect(() => {
-    setActiveSection(sections[0].id);
+    // Update the sections based on the screen size
+    if (isSmallScreen) {
+      // Add 'now playing' section on small screens
+      setCurrentSections([
+        {
+          id: "now playing",
+          title: <PlayArrowRoundedIcon />,
+          component: <FSPlayer />,
+        },
+        ...defaultSections,
+      ]);
+      setActiveSection("now playing"); // Automatically set "now playing" as active section on small screens
+    } else {
+      // Remove 'now playing' section on larger screens
+      setCurrentSections(defaultSections);
+
+      // If the active section is 'now playing', reset to the first valid section
+      if (activeSection === "now playing") {
+        setActiveSection(defaultSections[0].id);
+      }
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSmallScreen]);
 
@@ -78,7 +94,7 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           overflow: "hidden",
         }}
       >
-        {sections.map((section) => (
+        {currentSections.map((section) => (
           <Slide
             key={section.id}
             direction={!isSmallScreen ? "up" : "left"}
@@ -115,7 +131,7 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
       >
         {tabs ? (
           <Tabs
-            variant={sections.length > 5 ? "scrollable" : "fullWidth"}
+            variant={currentSections.length > 5 ? "scrollable" : "fullWidth"}
             orientation={isSmallScreen ? "horizontal" : "vertical"}
             value={activeSection}
             onChange={(_event, newValue) => handleToggleSection(newValue)}
@@ -123,7 +139,7 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
               width: isSmallScreen ? "100%" : "auto",
             }}
           >
-            {sections.map((section) => (
+            {currentSections.map((section) => (
               <Tab
                 key={section.id}
                 value={section.id}
@@ -134,7 +150,7 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           </Tabs>
         ) : (
           // Render Buttons by default
-          sections.map((section) => (
+          currentSections.map((section) => (
             <CustomButton
               key={section.id}
               borderRadius={25}

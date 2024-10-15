@@ -30,7 +30,7 @@ export const MiniPlayer = () => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: isSmallScreen ? "1fr 50px" : "1fr 1fr 1fr",
+          gridTemplateColumns: isSmallScreen ? "1fr auto" : "1fr 1fr 1fr",
           alignItems: "center",
           justifyContent: "space-between",
           width: "100%",
@@ -121,16 +121,23 @@ export const MiniPlayer = () => {
               gap: 0.5,
             }}
           >
-            <Typography
-              noWrap={isSmallScreen}
-              variant="subtitle2"
-              color="text.secondary"
-              fontWeight={600}
+            <Box
+              sx={{
+                display: "flex",
+                minWidth: 40,
+                textAlign: "right",
+              }}
             >
-              {`${formatSecondsToTime(currentTime)} / ${formatSecondsToTime(
-                duration
-              )}`}
-            </Typography>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                fontWeight={600}
+              >
+                {`${formatSecondsToTime(currentTime)} / ${formatSecondsToTime(
+                  duration
+                )}`}
+              </Typography>
+            </Box>
             <VolumeControl />
             <LyricsToggle />
             <FSPlayerToggle />

@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, Paper } from "@mui/material";
 import axiosInstance from "../../util/axios/axiosInstance";
 import { usePlayer } from "../../context/player/PlayerContext";
 import { Equalizer } from "../common/loading";
@@ -56,15 +56,17 @@ export const Lyrics = React.memo(() => {
       {currentSong?.hasLyrics && lyricsData ? (
         <Box sx={{ overflowY: "auto", height: "100%" }}>
           {/* Title */}
-          <Box
+          <Paper
+            elevation={3}
             sx={{
               position: playerMode === "fullscreen" ? "sticky" : "relative",
               backgroundColor: "background.paper",
+              width: "90%",
               top: 0,
             }}
           >
             {playerMode === "fullscreen" && (
-              <Typography variant="h2" fontWeight={600}>
+              <Typography variant="h4" fontWeight={600}>
                 Lyrics for {he.decode(currentSong.name)}
               </Typography>
             )}
@@ -73,7 +75,7 @@ export const Lyrics = React.memo(() => {
             <Typography variant="h6" fontStyle={"italic"} gutterBottom>
               {lyricsData?.snippet}
             </Typography>
-          </Box>
+          </Paper>
 
           <Divider sx={{ marginY: 2 }} />
 
