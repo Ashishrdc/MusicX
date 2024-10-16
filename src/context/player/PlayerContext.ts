@@ -12,6 +12,7 @@ interface PlayerContextType {
   playlist: Song[];
   currentTime: number; // Added
   duration: number; // Added
+  dominantColor: string | null;
   setCurrentTime: (time: number) => void; // Added
   setCurrentSong: (song: Song) => void;
   setAndPlaySong: (song: Song) => void;

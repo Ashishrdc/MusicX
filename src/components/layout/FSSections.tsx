@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Box, Slide, Tabs, Tab } from "@mui/material";
+import { Box, Slide, Tabs, Tab, Divider } from "@mui/material";
 import { CustomButton } from "../buttons/CustomButton";
 import { useLayout } from "../../context/layout/LayoutContext";
 import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
@@ -84,6 +84,8 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
         flexDirection: isSmallScreen ? "column" : "row",
         height: "100%",
         width: "100%",
+        borderRadius: 2,
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
       }}
     >
       {/* Top Row: Content */}
@@ -115,7 +117,16 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           </Slide>
         ))}
       </Box>
-
+      <Divider orientation={isSmallScreen ? "horizontal" : "vertical"} flexItem>
+        <Box
+          sx={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            backgroundColor: "black",
+          }}
+        />
+      </Divider>
       {/* Bottom Row: Toggle Buttons or Tabs */}
       <Box
         sx={{

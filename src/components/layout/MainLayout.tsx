@@ -39,9 +39,6 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                   height: "100%",
                   width: "240px",
                   position: "absolute",
-                  left: 0,
-                  top: 0,
-                  zIndex: 1300,
                 }}
               >
                 <Sidebar />

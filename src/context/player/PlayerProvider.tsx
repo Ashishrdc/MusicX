@@ -9,6 +9,7 @@ import React, {
 import { PlayerContext } from "./PlayerContext";
 import { RepeatMode } from "../../constants/types/common.types";
 import { Song } from "../../constants/interfaces/song.interface";
+import { getDominantColorFromImage } from "../../util/getDominantColor";
 
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -22,6 +23,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   const [queue, setQueue] = useState<Song[]>([]);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [dominantColor, setDominantColor] = useState<string | null>(null);
 
   // Ref
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -234,6 +236,19 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     return queue[currentIndex + 1] || "End of list";
   }, [queue, currentSong, repeatMode]);
 
+  useEffect(() => {
+    if (currentSong && currentSong.image && currentSong.image[1]?.url) {
+      // Fetch the dominant color when the song changes or the component mounts
+      getDominantColorFromImage(currentSong.image[1].url)
+        .then((color) => {
+          setDominantColor(color);
+        })
+        .catch((error) => {
+          console.error("Error fetching dominant color:", error);
+        });
+    }
+  }, [currentSong]);
+
   // Save playlist and queue to localStorage
   useEffect(() => {
     localStorage.setItem("playlist", JSON.stringify(playlist));
@@ -260,6 +275,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       queue,
       currentTime,
       duration,
+      dominantColor,
+      setDominantColor,
       toggleRepeatMode,
       setCurrentSong,
       setAndPlaySong,
@@ -285,6 +302,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       queue,
       currentTime,
       duration,
+      dominantColor,
       play,
       pause,
       playNext,
