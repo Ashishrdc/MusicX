@@ -40,13 +40,13 @@ export const CustomTitle = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          height: 80,
+          height: 70,
           p: 1,
           opacity: sidebarState === "open-expanded" || isSmallScreen ? 1 : 0, // Handles visibility
           visibility:
             sidebarState === "open-expanded" || isSmallScreen
               ? "visible"
-              : "hidden", // Ensures that the element doesn't block clicks
+              : "hidden",
           transition: "opacity 0.5s ease, visibility 0.5s ease",
         }}
       >
@@ -81,7 +81,7 @@ export const CustomTitle = ({
           position: "absolute",
           alignItems: "center",
           justifyContent: "center",
-          height: 80,
+          height: 70,
           inset: 0,
           p: 1,
           opacity: sidebarState === "open-mini" ? 1 : 0,

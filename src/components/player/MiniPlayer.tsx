@@ -31,8 +31,8 @@ export const MiniPlayer = () => {
         sx={{
           display: "grid",
           gridTemplateColumns: isSmallScreen ? "1fr auto" : "1fr 1fr 1fr",
-          alignItems: "center",
           justifyContent: "space-between",
+          alignItems: "center",
           width: "100%",
           marginTop: 0.5,
           padding: 1,

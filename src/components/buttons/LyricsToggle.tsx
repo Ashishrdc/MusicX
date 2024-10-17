@@ -24,7 +24,7 @@ export const LyricsToggle = () => {
         <Lyrics />
       </CustomModal>
       <CustomButton onClick={handleClick}>
-        <LyricsRoundedIcon fontSize="small" />
+        <LyricsRoundedIcon />
       </CustomButton>
     </Box>
   );

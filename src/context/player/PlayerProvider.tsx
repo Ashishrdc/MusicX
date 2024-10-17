@@ -9,7 +9,7 @@ import React, {
 import { PlayerContext } from "./PlayerContext";
 import { RepeatMode } from "../../constants/types/common.types";
 import { Song } from "../../constants/interfaces/song.interface";
-import { getDominantColorFromImage } from "../../util/getDominantColor";
+import { getDominantColorFromImage } from "../../util/helperFunctions";
 
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   children,

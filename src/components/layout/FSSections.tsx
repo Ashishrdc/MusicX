@@ -136,7 +136,7 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           width: isSmallScreen ? "100%" : "fit-content",
           justifyContent: "center",
           alignItems: "center",
-          padding: tabs ? 0 : 1,
+          padding: tabs ? 0.5 : 1,
           gap: 5,
         }}
       >

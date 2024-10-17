@@ -11,7 +11,6 @@ export const FSPlayer = () => {
     currentTime,
     duration,
     // getNextSong
-    dominantColor,
   } = usePlayer();
 
   // const nextSong = getNextSong();
@@ -26,9 +25,9 @@ export const FSPlayer = () => {
         height: "100%",
         width: "100%",
         padding: 2,
-        backgroundColor: dominantColor,
         borderRadius: 2,
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+        transition: "all 0.8s ease",
       }}
     >
       <Box

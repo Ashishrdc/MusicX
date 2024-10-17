@@ -2,22 +2,50 @@ import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
 import { useLayout } from "../../context/layout/LayoutContext";
-import { Box, Modal, Paper, Slide } from "@mui/material";
+import { Box, Modal, Paper, Slide, useTheme } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
+import { usePlayer } from "../../context/player/PlayerContext";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
-  const { sidebarState, isSmallScreen, searchMode, toggleSidebarState } =
-    useLayout();
+  const {
+    sidebarState,
+    isSmallScreen,
+    searchMode,
+    playerMode,
+    toggleSidebarState,
+  } = useLayout();
+  const { dominantColor } = usePlayer();
+  const theme = useTheme();
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: isSmallScreen ? "100dvh" : "100vh",
+        height: "100dvh",
+        transition: "background-color 0.8s ease",
+        backgroundColor: playerMode === "fullscreen" ? dominantColor : "none",
+        position: "relative",
       }}
     >
+      {/* Semi-transparent overlay */}
+      {playerMode === "fullscreen" && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            backgroundColor: `rgba(255, 255, 255, ${
+              theme.palette.mode === "light" ? 0.8 : 0.2
+            })`,
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
       {/* Container for sidebar and main content */}
       <Box sx={{ display: "flex", flex: 1 }}>
         {/* Sidebar */}
@@ -54,7 +82,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                 sidebarState === "open-expanded"
                   ? 200
                   : sidebarState === "open-mini"
-                  ? 80
+                  ? 70
                   : 0,
               overflow: "hidden",
               transition: "width 0.3s ease",
@@ -75,21 +103,18 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
           }}
         >
           {/* Navbar */}
-          <Paper
-            elevation={1}
-            square
+          <Box
             sx={{
               display: "flex",
               alignItems: "center",
               transition: "all 0.3s ease",
-              height: isSmallScreen ? 64 : 80,
+              height: isSmallScreen ? 60 : 70,
+              padding: isSmallScreen ? 0.5 : 1,
               width: "100%",
-              padding: 1,
-              top: 0,
             }}
           >
             {searchMode ? <SearchBar /> : <Navbar />}
-          </Paper>
+          </Box>
 
           {/* Main Content */}
           <Box

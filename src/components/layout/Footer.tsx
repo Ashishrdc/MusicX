@@ -35,7 +35,6 @@ export const Footer = () => {
             height: "100%",
             width: "100%",
             padding: isSmallScreen ? 0.5 : 1,
-            gap: 3,
           }}
         >
           {!isSmallScreen && (

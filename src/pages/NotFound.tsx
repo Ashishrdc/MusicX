@@ -1,10 +1,11 @@
-import { Typography, Box } from "@mui/material";
+import { Typography } from "@mui/material";
+import { CenteredFlexBox } from "../components/common/box/CenteredFlexBox";
 
 export const NotFound = () => {
   return (
-    <Box>
-      <Typography>Page Not Found! :(</Typography>
-    </Box>
+    <CenteredFlexBox>
+      <Typography variant="h1">WHeRe Am I? (T-T)</Typography>
+    </CenteredFlexBox>
   );
 };
 
