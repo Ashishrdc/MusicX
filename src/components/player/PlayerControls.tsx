@@ -52,7 +52,11 @@ export const PlayerControls = () => {
         // Render full controls on larger screens
         <>
           <ShuffleToggle />
-          <CustomButton onClick={playPrevious} hover={false}>
+          <CustomButton
+            onClick={playPrevious}
+            hover={false}
+            color={playerMode === "fullscreen" ? "secondary" : "primary"}
+          >
             <SkipPreviousRoundedIcon sx={{ fontSize: fontSize }} />
           </CustomButton>
           <CustomButton
@@ -67,7 +71,11 @@ export const PlayerControls = () => {
               <PlayArrowRoundedIcon sx={{ fontSize: fontSize }} />
             )}
           </CustomButton>
-          <CustomButton onClick={playNext} hover={false}>
+          <CustomButton
+            onClick={playNext}
+            hover={false}
+            color={playerMode === "fullscreen" ? "secondary" : "primary"}
+          >
             <SkipNextRoundedIcon sx={{ fontSize: fontSize }} />
           </CustomButton>
           <RepeatModeToggle />

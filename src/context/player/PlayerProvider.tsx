@@ -18,7 +18,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
-  const [volume, setVolume] = useState<number>(0.5); // Default volume at 50%
+  const [volume, setVolume] = useState<number>(1);
   const [playlist, setPlaylist] = useState<Song[]>([]);
   const [queue, setQueue] = useState<Song[]>([]);
   const [currentTime, setCurrentTime] = useState(0);
@@ -107,6 +107,33 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       playNext(); // Play the next song in the queue or stop based on repeatMode
     }
   }, [playNext, repeatMode]);
+
+  // Get next song
+  const getNextSong = useCallback(() => {
+    if (!queue.length || !currentSong) {
+      return "End of list";
+    }
+
+    const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
+
+    // If repeatMode is "one", repeat the current song
+    if (repeatMode === "one") {
+      return "Repeating current song";
+    }
+
+    // If repeatMode is "off" and the current song is the last in the queue
+    if (repeatMode === "off" && currentIndex === queue.length - 1) {
+      return "End of list";
+    }
+
+    // If repeatMode is "all" and the current song is the last, loop back to the first song
+    if (repeatMode === "all" && currentIndex === queue.length - 1) {
+      return queue[0]; // Return the first song in the queue
+    }
+
+    // Return the next song in the queue if available
+    return queue[currentIndex + 1] || "End of list";
+  }, [queue, currentSong, repeatMode]);
 
   // Playlist functions
   const addToPlaylist = useCallback(
@@ -210,35 +237,9 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [isPlaying]);
 
-  const getNextSong = useCallback(() => {
-    if (!queue.length || !currentSong) {
-      return "End of list";
-    }
-
-    const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
-
-    // If repeatMode is "one", repeat the current song
-    if (repeatMode === "one") {
-      return "Repeating current song";
-    }
-
-    // If repeatMode is "off" and the current song is the last in the queue
-    if (repeatMode === "off" && currentIndex === queue.length - 1) {
-      return "End of list";
-    }
-
-    // If repeatMode is "all" and the current song is the last, loop back to the first song
-    if (repeatMode === "all" && currentIndex === queue.length - 1) {
-      return queue[0]; // Return the first song in the queue
-    }
-
-    // Return the next song in the queue if available
-    return queue[currentIndex + 1] || "End of list";
-  }, [queue, currentSong, repeatMode]);
-
+  // Fetch the dominant color when the song changes or the component mounts
   useEffect(() => {
     if (currentSong && currentSong.image && currentSong.image[1]?.url) {
-      // Fetch the dominant color when the song changes or the component mounts
       getDominantColorFromImage(currentSong.image[1].url)
         .then((color) => {
           setDominantColor(color);
@@ -262,6 +263,73 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     if (savedPlaylist) setPlaylist(JSON.parse(savedPlaylist));
     if (savedQueue) setQueue(JSON.parse(savedQueue));
   }, []);
+
+  //-------------------------Media Session----------------------//
+  useEffect(() => {
+    if (audioRef.current && currentSong) {
+      // Media Session API Setup
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: currentSong.name,
+          artist: currentSong.artists.primary
+            .map((artist) => artist.name)
+            .join(","),
+          album: currentSong.album.name,
+          artwork: [
+            {
+              src: currentSong.image[0]?.url,
+              sizes: "96x96",
+              type: "image/png",
+            },
+            {
+              src: currentSong.image[1]?.url,
+              sizes: "128x128",
+              type: "image/png",
+            },
+            {
+              src: currentSong.image[1]?.url,
+              sizes: "192x192",
+              type: "image/png",
+            },
+          ],
+        });
+
+        // Play and Pause Handlers
+        navigator.mediaSession.setActionHandler("play", () => {
+          play();
+        });
+        navigator.mediaSession.setActionHandler("pause", () => {
+          pause();
+        });
+
+        // Previous and Next Handlers
+        navigator.mediaSession.setActionHandler("previoustrack", () => {
+          playPrevious();
+        });
+        navigator.mediaSession.setActionHandler("nexttrack", () => {
+          playNext();
+        });
+      }
+    }
+    // Seek Forward and Seek Backward Handlers
+    navigator.mediaSession.setActionHandler("seekforward", () => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = Math.min(
+          audioRef.current.duration,
+          audioRef.current.currentTime + 10
+        );
+      }
+    });
+
+    navigator.mediaSession.setActionHandler("seekbackward", () => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = Math.max(
+          0,
+          audioRef.current.currentTime - 10
+        );
+      }
+    });
+  }, [currentSong, play, pause, playNext, playPrevious]);
 
   // Memoize context value
   const contextValue = useMemo(

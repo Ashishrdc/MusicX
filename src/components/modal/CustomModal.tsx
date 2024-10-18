@@ -57,9 +57,7 @@ export const CustomModal = ({
             </Box>
             <Box
               sx={{
-                display: "flex",
                 width: "fit-content",
-                height: "100%",
               }}
             >
               <CustomButton color="error" onClick={onClose}>

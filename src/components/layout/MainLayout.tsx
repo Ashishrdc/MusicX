@@ -36,9 +36,10 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             position: "absolute",
             width: "100%",
             height: "100%",
-            backgroundColor: `rgba(255, 255, 255, ${
-              theme.palette.mode === "light" ? 0.8 : 0.2
-            })`,
+            backgroundColor:
+              theme.palette.mode === "light"
+                ? "rgba(255, 255, 255, 0.2)"
+                : "rgba(0, 0, 0, 0.2)",
             inset: 0,
             zIndex: 0,
             pointerEvents: "none",
