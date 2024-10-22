@@ -111,6 +111,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               transition: "all 0.3s ease",
               height: isSmallScreen ? 60 : 70,
               padding: isSmallScreen ? 0.5 : 1,
+              backgroundColor: "background.paper",
               width: "100%",
             }}
           >

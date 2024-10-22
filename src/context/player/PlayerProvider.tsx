@@ -10,6 +10,7 @@ import { PlayerContext } from "./PlayerContext";
 import { RepeatMode } from "../../constants/types/common.types";
 import { Song } from "../../constants/interfaces/song.interface";
 import { getDominantColorFromImage } from "../../util/helperFunctions";
+import he from "he";
 
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -270,9 +271,9 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       // Media Session API Setup
       if ("mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: currentSong.name,
+          title: he.decode(currentSong.name),
           artist: currentSong.artists.primary
-            .map((artist) => artist.name)
+            .map((artist) => he.decode(artist.name))
             .join(","),
           album: currentSong.album.name,
           artwork: [

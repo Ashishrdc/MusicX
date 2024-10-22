@@ -42,7 +42,7 @@ export const CustomTitle = ({
           justifyContent: "center",
           height: 70,
           p: 1,
-          opacity: sidebarState === "open-expanded" || isSmallScreen ? 1 : 0, // Handles visibility
+          opacity: sidebarState === "open-expanded" || isSmallScreen ? 1 : 0,
           visibility:
             sidebarState === "open-expanded" || isSmallScreen
               ? "visible"
