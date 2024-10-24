@@ -15,6 +15,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
     playerMode,
     toggleSidebarState,
   } = useLayout();
+  const { themeMode } = useLayout();
   const { dominantColor } = usePlayer();
   const theme = useTheme();
 
@@ -111,7 +112,8 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               transition: "all 0.3s ease",
               height: isSmallScreen ? 60 : 70,
               padding: isSmallScreen ? 0.5 : 1,
-              backgroundColor: "background.paper",
+              backgroundColor:
+                themeMode === "dark" ? "background.paper" : "none",
               width: "100%",
             }}
           >

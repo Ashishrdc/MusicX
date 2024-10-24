@@ -36,7 +36,7 @@ export const FSPlayer = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          maxHeight: "50vh",
+          maxHeight: "50dvh",
           width: "100%",
         }}
       >
