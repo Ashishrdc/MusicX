@@ -17,7 +17,8 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
         sx={{
           inset: 0,
           position: "fixed",
-          backdropFilter: "blur(70px)",
+          backdropFilter: "blur(60px)",
+          zIndex: 10,
         }}
       >
         <Box

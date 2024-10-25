@@ -24,10 +24,11 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100dvh",
         transition: "background-color 0.8s ease",
         backgroundColor: playerMode === "fullscreen" ? dominantColor : "none",
         position: "relative",
+        overflow: "hidden",
+        height: "100dvh",
       }}
     >
       {/* Semi-transparent overlay */}
@@ -39,11 +40,11 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             height: "100%",
             backgroundColor:
               theme.palette.mode === "light"
-                ? "rgba(255, 255, 255, 0.2)"
-                : "rgba(0, 0, 0, 0.2)",
-            inset: 0,
-            zIndex: 0,
+                ? "rgba(255, 255, 255, 0.35)"
+                : "rgba(0, 0, 0, 0.3)",
             pointerEvents: "none",
+            zIndex: 2,
+            inset: 0,
           }}
         />
       )}
