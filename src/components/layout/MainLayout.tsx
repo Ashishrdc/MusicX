@@ -13,9 +13,9 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
     isSmallScreen,
     searchMode,
     playerMode,
+    themeMode,
     toggleSidebarState,
   } = useLayout();
-  const { themeMode } = useLayout();
   const { dominantColor } = usePlayer();
   const theme = useTheme();
 
