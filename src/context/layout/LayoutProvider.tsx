@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { LayoutContext } from "./LayoutContext";
 import {
   CssBaseline,
@@ -51,21 +51,27 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
   const [playerMode, setPlayerMode] = useState<PlayerMode>("mini");
 
   // Variables
-  // const currentTheme = getTheme(themeName, themeMode);
-  const currentTheme = getTheme("blue", themeMode);
+  const currentTheme = useMemo(
+    () => getTheme("orangered", themeMode),
+    [themeMode]
+  );
 
-  // -------------------------------Functions ---------------------------------//
+  // -------------------------------Functions----------------------------------//
   const selectTheme = (newTheme: ThemeName) => {
     setThemeName(newTheme);
   };
 
   const toggleSidebarState = () => {
-    if (isSmallScreen) {
-      setSidebarState(sidebarState === "closed" ? "open-expanded" : "closed");
-    } else {
-      setSidebarState(
-        sidebarState === "open-mini" ? "open-expanded" : "open-mini"
-      );
+    const newState = isSmallScreen
+      ? sidebarState === "closed"
+        ? "open-expanded"
+        : "closed"
+      : sidebarState === "open-mini"
+      ? "open-expanded"
+      : "open-mini";
+
+    if (newState !== sidebarState) {
+      setSidebarState(newState);
     }
   };
 
@@ -85,6 +91,13 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
     playerMode === "mini" ? setPlayerMode("fullscreen") : setPlayerMode("mini");
   };
 
+  const isMobileDevice = (): boolean => {
+    const userAgent = navigator.userAgent;
+    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      userAgent.toLowerCase()
+    );
+  };
+
   // -------------------------------SideEffects---------------------------------//
 
   // Save theme mode to local storage whenever it changes
@@ -102,7 +115,6 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
     if (isSmallScreen || playerMode === "fullscreen") {
       setSidebarState("closed");
     } else {
-      // Use the stored user preference or default to "open-expanded"
       const userPreference = localStorage.getItem("sidebarState") as
         | "open-mini"
         | "open-expanded"
@@ -119,12 +131,41 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [sidebarState, isSmallScreen]);
 
+  // Handle back button for fullscreen mode
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (playerMode === "fullscreen") {
+        // Prevent navigation
+        event.preventDefault();
+
+        // Exit fullscreen mode
+        setPlayerMode("mini");
+
+        // Push the current state back to history to prevent navigation
+        window.history.pushState(
+          null,
+          "",
+          window.location.pathname + window.location.search
+        );
+      }
+    };
+
+    // Listen for the browser back button (popstate)
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      // Cleanup listener on component unmount
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [playerMode, setPlayerMode]);
+
   return (
     <LayoutContext.Provider
       value={{
         isSmallScreen,
         isMediumScreen,
         isLargeScreen,
+        isMobileDevice,
         sidebarState,
         themeMode,
         themeName,

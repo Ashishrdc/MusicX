@@ -111,11 +111,11 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               display: "flex",
               alignItems: "center",
               transition: "all 0.3s ease",
-              height: isSmallScreen ? 60 : 70,
-              padding: isSmallScreen ? 0.5 : 1,
+              height: 70,
+              width: "100%",
+              padding: 1,
               backgroundColor:
                 themeMode === "dark" ? "background.paper" : "none",
-              width: "100%",
             }}
           >
             {searchMode ? <SearchBar /> : <Navbar />}

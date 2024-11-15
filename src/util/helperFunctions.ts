@@ -109,3 +109,13 @@ export const getDominantColorFromImage = (
     };
   });
 };
+
+// Utility function
+export const getFromLocalStorage = <T>(key: string, defaultValue: T): T => {
+  const storedValue = localStorage.getItem(key);
+  return storedValue ? (JSON.parse(storedValue) as T) : defaultValue;
+};
+
+export const setToLocalStorage = <T>(key: string, value: T) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};

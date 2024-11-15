@@ -11,6 +11,7 @@ interface LayoutContextType {
   isSmallScreen: boolean;
   isMediumScreen: boolean;
   isLargeScreen: boolean;
+  isMobileDevice: () => boolean;
   searchMode: boolean;
   playerMode: PlayerMode;
   themeMode: ThemeMode;

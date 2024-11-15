@@ -41,7 +41,6 @@ export const CustomTitle = ({
           alignItems: "center",
           justifyContent: "center",
           height: 70,
-          p: 1,
           opacity: sidebarState === "open-expanded" || isSmallScreen ? 1 : 0,
           visibility:
             sidebarState === "open-expanded" || isSmallScreen
@@ -83,7 +82,6 @@ export const CustomTitle = ({
           justifyContent: "center",
           height: 70,
           inset: 0,
-          p: 1,
           opacity: sidebarState === "open-mini" ? 1 : 0,
           visibility: sidebarState === "open-mini" ? "visible" : "hidden",
           transition: "opacity 1s ease, visibility 0.5s ease",

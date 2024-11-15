@@ -13,13 +13,14 @@ export const ScrollbarStyles = ({
   borderRadius,
 }: ScrollbarProps) => {
   const theme = useTheme();
-  const { playerMode } = useLayout();
+  const { playerMode, isMobileDevice } = useLayout();
 
   return (
     <GlobalStyles
       styles={{
         "::-webkit-scrollbar": {
-          display: playerMode === "fullscreen" ? "none" : "block",
+          display:
+            playerMode === "fullscreen" || isMobileDevice() ? "none" : "block",
           width: width != undefined ? width : 8,
         },
         "::-webkit-scrollbar-thumb": {

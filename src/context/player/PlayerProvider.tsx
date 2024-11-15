@@ -68,12 +68,18 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   // Play Next Song with queue handling
   const playNext = useCallback(() => {
     if (!queue.length) return; // No songs in queue
+
     const currentIndex = currentSong
       ? queue.findIndex((song) => song.id === currentSong.id)
       : -1;
 
     if (repeatMode === "one") {
-      safePlay(); // Replay the current song
+      // If repeatMode is "one", allow next only within the queue, don't jump
+      if (currentIndex === -1 || currentIndex === queue.length - 1) {
+        return; // Stay on the current song if no next song
+      } else {
+        setAndPlaySong(queue[currentIndex + 1]); // Play the next song
+      }
     } else if (currentIndex === -1 || currentIndex === queue.length - 1) {
       if (repeatMode === "all") {
         setAndPlaySong(queue[0]); // Loop back to the start of the queue
@@ -89,9 +95,17 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   // Play Previous Song
   const playPrevious = useCallback(() => {
     if (!queue.length || !currentSong) return;
+
     const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
 
-    if (currentIndex > 0) {
+    if (repeatMode === "one") {
+      // If repeatMode is "one", allow previous only within the queue, don't jump
+      if (currentIndex > 0) {
+        setAndPlaySong(queue[currentIndex - 1]); // Play the previous song
+      } else {
+        return; // Stay on the first song, do not move back
+      }
+    } else if (currentIndex > 0) {
       setAndPlaySong(queue[currentIndex - 1]); // Play the previous song
     } else if (repeatMode === "all") {
       setAndPlaySong(queue[queue.length - 1]); // Loop back to the last song
@@ -267,69 +281,74 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
 
   //-------------------------Media Session----------------------//
   useEffect(() => {
-    if (audioRef.current && currentSong) {
-      // Media Session API Setup
-      if ("mediaSession" in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: he.decode(currentSong.name),
-          artist: currentSong.artists.primary
-            .map((artist) => he.decode(artist.name))
-            .join(","),
-          album: currentSong.album.name,
-          artwork: [
-            {
-              src: currentSong.image[0]?.url,
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              src: currentSong.image[1]?.url,
-              sizes: "128x128",
-              type: "image/png",
-            },
-            {
-              src: currentSong.image[1]?.url,
-              sizes: "192x192",
-              type: "image/png",
-            },
-          ],
-        });
+    if (audioRef.current && currentSong && "mediaSession" in navigator) {
+      // Update Media Metadata dynamically on song change
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: he.decode(currentSong.name),
+        artist: currentSong.artists.primary
+          .map((artist) => he.decode(artist.name))
+          .join(","),
+        album: currentSong.album.name,
+        artwork: [
+          {
+            src: currentSong.image[0]?.url,
+            sizes: "96x96",
+            type: "image/png",
+          },
+          {
+            src: currentSong.image[0]?.url,
+            sizes: "128x128",
+            type: "image/png",
+          },
+          {
+            src: currentSong.image[1]?.url,
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: currentSong.image[2]?.url,
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      });
 
-        // Play and Pause Handlers
-        navigator.mediaSession.setActionHandler("play", () => {
-          play();
+      // Set action handlers only once to avoid redundancy
+      const setMediaSessionHandlers = () => {
+        navigator.mediaSession.setActionHandler("play", play);
+        navigator.mediaSession.setActionHandler("pause", pause);
+        navigator.mediaSession.setActionHandler("previoustrack", playPrevious);
+        navigator.mediaSession.setActionHandler("nexttrack", playNext);
+        navigator.mediaSession.setActionHandler("seekforward", () => {
+          if (audioRef.current) {
+            audioRef.current.currentTime = Math.min(
+              audioRef.current.duration,
+              audioRef.current.currentTime + 10
+            );
+          }
         });
-        navigator.mediaSession.setActionHandler("pause", () => {
-          pause();
+        navigator.mediaSession.setActionHandler("seekbackward", () => {
+          if (audioRef.current) {
+            audioRef.current.currentTime = Math.max(
+              0,
+              audioRef.current.currentTime - 10
+            );
+          }
         });
+      };
 
-        // Previous and Next Handlers
-        navigator.mediaSession.setActionHandler("previoustrack", () => {
-          playPrevious();
-        });
-        navigator.mediaSession.setActionHandler("nexttrack", () => {
-          playNext();
-        });
-      }
+      setMediaSessionHandlers();
+
+      // Cleanup function to reset the media session on component unmount or song change
+      return () => {
+        navigator.mediaSession.setActionHandler("play", null);
+        navigator.mediaSession.setActionHandler("pause", null);
+        navigator.mediaSession.setActionHandler("previoustrack", null);
+        navigator.mediaSession.setActionHandler("nexttrack", null);
+        navigator.mediaSession.setActionHandler("seekforward", null);
+        navigator.mediaSession.setActionHandler("seekbackward", null);
+      };
     }
-    // Seek Forward and Seek Backward Handlers
-    navigator.mediaSession.setActionHandler("seekforward", () => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.min(
-          audioRef.current.duration,
-          audioRef.current.currentTime + 10
-        );
-      }
-    });
-
-    navigator.mediaSession.setActionHandler("seekbackward", () => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.max(
-          0,
-          audioRef.current.currentTime - 10
-        );
-      }
-    });
   }, [currentSong, play, pause, playNext, playPrevious]);
 
   // Memoize context value
