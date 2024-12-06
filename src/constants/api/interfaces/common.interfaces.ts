@@ -19,9 +19,9 @@ export interface ArtistGroup {
 }
 
 export interface Album {
-  id: string | null;
-  name: string | null;
-  url: string | null;
+  id: string;
+  name: string;
+  url: string;
 }
 
 export interface Lyrics {

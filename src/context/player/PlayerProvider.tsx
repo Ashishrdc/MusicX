@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { PlayerContext } from "./PlayerContext";
 import { RepeatMode } from "../../constants/types/common.types";
-import { Song } from "../../constants/interfaces/song.interface";
+import { Song } from "../../constants/api/interfaces/song";
 import { getDominantColorFromImage } from "../../util/helperFunctions";
 import he from "he";
 
