@@ -106,7 +106,7 @@ export const Sidebar = () => {
             transition: "all 0.8s ease",
           }}
         >
-          {isExpanded ? "Made with ❤️ by Ashish Chaurasiya" : "❤️"}
+          {isExpanded ? "Made with ❤️" : "❤️"}
         </Typography>
       </Box>
     </Box>
