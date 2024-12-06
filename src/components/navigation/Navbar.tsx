@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Collapse, Fade, Slide } from "@mui/material";
 import { SearchBar } from "../search/SearchBar";
 import { ThemeToggle } from "../buttons/ThemeToggle";
 import { SidebarToggle } from "../buttons/SidebarToggle";
@@ -23,17 +23,45 @@ export const Navbar = () => {
     >
       {/* SidebarToggle or Title based on screen size */}
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        {!isSmallScreen ? <SidebarToggle /> : <CustomTitle />}
+        <Fade in={!isSmallScreen} timeout={300}>
+          <Box>{!isSmallScreen && <SidebarToggle />}</Box>
+        </Fade>
+
+        <Slide
+          in={isSmallScreen}
+          direction="right"
+          timeout={450}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Box>{isSmallScreen && <CustomTitle />}</Box>
+        </Slide>
       </Box>
 
       {/* SearchBar (hidden on small screens) */}
-      {!isSmallScreen && <SearchBar />}
+
+      <Collapse
+        in={!isSmallScreen}
+        timeout={1000}
+        sx={{ width: "100%" }}
+        unmountOnExit
+      >
+        <SearchBar />
+      </Collapse>
 
       {/* Right-side controls */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        {isSmallScreen && <SearchToggle />}
+        {/* Animate SearchToggle */}
+        <Fade in={isSmallScreen} timeout={300}>
+          <Box>{isSmallScreen && <SearchToggle />}</Box>
+        </Fade>
+
         <ThemeToggle />
-        {isSmallScreen && <SidebarToggle />}
+
+        {/* Animate SidebarToggle (small screens) */}
+        <Fade in={isSmallScreen} timeout={300}>
+          <Box>{isSmallScreen && <SidebarToggle />}</Box>
+        </Fade>
       </Box>
     </Box>
   );

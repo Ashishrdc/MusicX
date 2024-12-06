@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { SongsApiResponse } from "../../constants/interfaces/api.responses";
-import { Song } from "../../constants/interfaces/song.interface";
+import { Song, SongApiResponse } from "../../constants/api/interfaces/song";
 import { ViewToggle } from "../buttons/ViewToggle";
 import { SongList } from "../player/SongList";
 import { useLayout } from "../../context/layout/LayoutContext";
@@ -14,7 +13,7 @@ export const SearchResult = () => {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await axiosInstance.get<SongsApiResponse>(
+        const response = await axiosInstance.get<SongApiResponse>(
           `/api/search/songs?query=${searchQuery}`
         );
         setSongResult(response.data.data.results);

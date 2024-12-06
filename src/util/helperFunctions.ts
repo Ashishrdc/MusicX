@@ -1,5 +1,3 @@
-import { darken } from "@mui/material";
-
 export const formatSecondsToTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
@@ -16,12 +14,25 @@ export const formatSecondsToTime = (seconds: number): string => {
   }
 };
 
-export const createGradient = (
+/**
+ *
+ * @param {string} primaryColor - The base color used as the starting color in the gradient.
+ *                                Accepts any valid CSS color string (e.g., `"#ff0000"`, `"rgb(255, 0, 0)"`, or `"red"`).
+ * @param {string} secondaryColor - The second color used as the starting color in the gradient.
+ *                                Accepts any valid CSS color string (e.g., `"#ff0000"`, `"rgb(255, 0, 0)"`, or `"red"`).
+ * @param {string} [rotation="90deg"] - The angle or direction of the gradient. Defaults to `"90deg"`.
+ *                                      Accepts any valid CSS angle string (e.g., `"45deg"`, `"to right"`).
+ * @returns {string} A string representing the linear gradient in the format:
+ *                   `linear-gradient(rotation, primaryColor, secondaryColor)`.
+ *
+ */
+export const createLinearGradient = (
   primaryColor: string,
+  secondaryColor: string,
   rotation: string = "90deg"
 ): string => {
-  const secondaryColor = darken(primaryColor, 0.5);
-  return `linear-gradient(${rotation}, ${primaryColor}, ${secondaryColor})`;
+  const linearGradient = `linear-gradient(${rotation}, ${primaryColor}, ${secondaryColor})`;
+  return linearGradient;
 };
 
 // Utility function: debounce

@@ -18,7 +18,7 @@ interface Section {
 
 interface FSSectionsProps {
   sections?: Section[];
-  tabs?: boolean; // New prop to control rendering of buttons or tabs
+  tabs?: boolean;
 }
 
 export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {

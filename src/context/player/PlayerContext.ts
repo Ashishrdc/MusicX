@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Song } from "../../constants/interfaces/song.interface";
+import { Song } from "../../constants/api/interfaces/song";
 import { RepeatMode } from "../../constants/types/common.types";
 
 interface PlayerContextType {

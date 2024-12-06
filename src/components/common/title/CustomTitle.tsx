@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
 import { Box, useTheme } from "@mui/material";
 import { useLayout } from "../../../context/layout/LayoutContext";
-import { createGradient } from "../../../util/helperFunctions";
+import { createLinearGradient } from "../../../util/helperFunctions";
 
 interface CustomTitleProps {
   title?: number | string;
@@ -90,7 +90,10 @@ export const CustomTitle = ({
         <Box
           sx={{
             display: isSmallScreen ? "none" : "flex",
-            background: createGradient(theme.palette.primary.main),
+            background: createLinearGradient(
+              theme.palette.primary.light,
+              theme.palette.primary.main
+            ),
             position: "absolute",
             inset: 0,
           }}

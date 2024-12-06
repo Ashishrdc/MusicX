@@ -1,4 +1,4 @@
-import { Song } from "./song.interface";
+import { Song } from "../api/interfaces/song";
 
 export interface SongCardProps {
   song: Song;

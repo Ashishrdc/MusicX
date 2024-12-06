@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import { Song } from "../../constants/interfaces/song.interface"; // Import your Song type
+import { Song } from "../../constants/api/interfaces/song";
 import { usePlayer } from "../../context/player/PlayerContext";
 import { BoxSongCard } from "../cards/BoxSongCard";
-
 import { RectangularSongCard } from "../cards/RectangularSongCard";
 import { useLayout } from "../../context/layout/LayoutContext";
+
 interface SongList {
   songs: Song[];
 }

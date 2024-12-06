@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { Sidebar } from "./Sidebar";
-import { Navbar } from "./Navbar";
+import { Sidebar } from "../navigation/Sidebar";
+import { Navbar } from "../navigation/Navbar";
 import { useLayout } from "../../context/layout/LayoutContext";
 import { Box, Modal, Paper, Slide, useTheme } from "@mui/material";
 import { Footer } from "./Footer";
@@ -51,8 +51,8 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
 
       {/* Container for sidebar and main content */}
       <Box sx={{ display: "flex", flex: 1 }}>
-        {/* Sidebar */}
-        {isSmallScreen ? (
+        {/* Sidebar Modal */}
+        {isSmallScreen && (
           <Modal
             open={sidebarState === "open-expanded"}
             onClose={toggleSidebarState}
@@ -76,24 +76,25 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               </Paper>
             </Slide>
           </Modal>
-        ) : (
-          <Paper
-            elevation={3}
-            square
-            sx={{
-              width:
-                sidebarState === "open-expanded"
-                  ? 200
-                  : sidebarState === "open-mini"
-                  ? 70
-                  : 0,
-              overflow: "hidden",
-              transition: "width 0.3s ease",
-            }}
-          >
-            <Sidebar />
-          </Paper>
         )}
+
+        {/* Sidebar */}
+        <Paper
+          elevation={3}
+          square
+          sx={{
+            width:
+              !isSmallScreen && sidebarState === "open-expanded"
+                ? 200
+                : sidebarState === "open-mini"
+                ? 70
+                : 0,
+            overflow: "hidden",
+            transition: "width 0.3s ease-in-out",
+          }}
+        >
+          <Sidebar />
+        </Paper>
 
         {/* Main content area */}
         <Box

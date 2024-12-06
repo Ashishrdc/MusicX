@@ -18,8 +18,8 @@ const themeColors = {
 const createLightPalette = (mainColor: string): PaletteOptions => ({
   primary: {
     main: mainColor,
-    light: lighten(mainColor, 0.2),
-    dark: darken(mainColor, 0.1),
+    light: lighten(mainColor, 0.3),
+    dark: darken(mainColor, 0.3),
     contrastText: "#FFFFFF",
   },
   secondary: {
@@ -44,8 +44,8 @@ const createLightPalette = (mainColor: string): PaletteOptions => ({
 const createDarkPalette = (mainColor: string): PaletteOptions => ({
   primary: {
     main: mainColor,
-    light: lighten(mainColor, 0.2),
-    dark: darken(mainColor, 0.1),
+    light: lighten(mainColor, 0.3),
+    dark: darken(mainColor, 0.3),
     contrastText: "#FFFFFF",
   },
   secondary: {

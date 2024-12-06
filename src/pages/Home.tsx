@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { SearchResult } from "../components/search/SearchResults";
+import { MediaSection } from "../components/sections/MediaSection";
 
 export const Home = () => {
   return (
@@ -12,7 +13,11 @@ export const Home = () => {
         overflowY: "auto",
       }}
     >
-      {/* <SearchResult /> */}
+      <MediaSection
+        title="Home"
+        subtitle="My sweet home."
+        containerStyles={{ height: 100 }}
+      ></MediaSection>
       <SearchResult />
     </Box>
   );
