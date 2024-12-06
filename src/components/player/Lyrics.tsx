@@ -5,12 +5,9 @@ import axiosInstance from "../../util/axios/axiosInstance";
 import { usePlayer } from "../../context/player/PlayerContext";
 import { Equalizer } from "../common/loading";
 import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
-import {
-  LyricsApiResponse,
-  LyricsData,
-} from "../../constants/interfaces/api.responses";
 import { useLayout } from "../../context/layout/LayoutContext";
 import he from "he";
+import { LyricsApiResponse, LyricsData } from "../../constants/api/interfaces/lyrics";
 
 export const Lyrics = React.memo(() => {
   const { currentSong } = usePlayer();
