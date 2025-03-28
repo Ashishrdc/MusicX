@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create an Axios instance with default settings
 const axiosInstance = axios.create({
-  baseURL: "https://jiosaavnapi-server.vercel.app/",
+  baseURL: "https://saavn.dev/",
   headers: {
     "Content-Type": "application/json",
   },
