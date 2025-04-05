@@ -52,7 +52,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
 
   // Variables
   const currentTheme = useMemo(
-    () => getTheme("hotpink", themeMode),
+    () => getTheme("orangered", themeMode),
     [themeMode]
   );
 
