@@ -2,10 +2,11 @@ import { ReactNode } from "react";
 import { Sidebar } from "../navigation/Sidebar";
 import { Navbar } from "../navigation/Navbar";
 import { useLayout } from "../../context/layout/LayoutContext";
-import { Box, Modal, Paper, Slide, useTheme } from "@mui/material";
+import { Box, Modal, Paper, Slide, Collapse, useTheme } from "@mui/material";
 import { Footer } from "./Footer";
 import { SearchBar } from "../search/SearchBar";
 import { usePlayer } from "../../context/player/PlayerContext";
+import { useLocation } from "react-router-dom";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const {
@@ -19,6 +20,10 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { dominantColor } = usePlayer();
   const theme = useTheme();
 
+  /* Added by Yugant N (05-2026), to check /search location to show/hide SearchBar  */
+  const location = useLocation();
+  const isSearchPage = location.pathname === "/search";
+
   return (
     <Box
       sx={{
@@ -27,7 +32,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         transition: "background-color 0.8s ease",
         backgroundColor: playerMode === "fullscreen" ? dominantColor : "none",
         position: "relative",
-        overflow: "hidden",
+        overflowX: "hidden",
         height: "100dvh",
       }}
     >
@@ -87,9 +92,9 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               !isSmallScreen && sidebarState === "open-expanded"
                 ? 200
                 : sidebarState === "open-mini"
-                ? 70
-                : 0,
-            overflow: "hidden",
+                  ? 70
+                  : 0,
+            overflowX: "hidden",
             transition: "width 0.3s ease-in-out",
           }}
         >
@@ -97,30 +102,64 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         </Paper>
 
         {/* Main content area */}
+
+        {/* Modified by Yugant N (05-2026), to Show/Hide Search Bar when location == /search */}
         <Box
           sx={{
             flex: 1,
             display: "flex",
             flexDirection: "column",
             position: "relative",
-            height: "100dvh",
+            minHeight: 0,
           }}
         >
           {/* Navbar */}
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
-              transition: "all 0.3s ease",
-              height: 70,
+              flexDirection: "column",
               width: "100%",
-              padding: 1,
               backgroundColor:
-                themeMode === "dark" ? "background.paper" : "none",
+                theme.palette.mode === "dark"
+                  ? "background.paper"
+                  : "transparent",
             }}
           >
-            {searchMode ? <SearchBar /> : <Navbar />}
+            {/* NAVBAR */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                minHeight: 70,
+                width: "100%",
+                px: 1,
+              }}
+            >
+              <Navbar />
+            </Box>
+
+            {/* SEARCHBAR */}
+            <Collapse
+              in={isSearchPage}
+              timeout={350}
+              unmountOnExit
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  px: 1,
+                  pb: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+
+                <SearchBar />
+              </Box>
+            </Collapse>
           </Box>
+
+          {/* ------------------------------------ */}
 
           {/* Main Content */}
           <Box
@@ -128,6 +167,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
               flex: 1,
               overflowY: "auto",
               padding: 1,
+              minHeight: 0,
             }}
           >
             {children}

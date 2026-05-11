@@ -1,8 +1,9 @@
-import { Box, Slide, Typography } from "@mui/material";
+import { Box, Slide, Typography, Tooltip } from "@mui/material";
 import { useLayout } from "../../context/layout/LayoutContext";
 import { routes } from "../../constants/routes/NavRoutes";
 import { CustomTitle } from "../common/title/CustomTitle";
 import { LinkWrapper } from "./LinkWrapper";
+import { PaletteSelector } from "../palette/PaletteSelector";
 
 export const Sidebar = () => {
   const { sidebarState, isSmallScreen, toggleSidebarState } = useLayout();
@@ -50,42 +51,78 @@ export const Sidebar = () => {
         }}
       >
         {routes.map(({ path, name, icon }) => (
-          <LinkWrapper key={name} to={path} onClick={handleClick}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {icon}
-            </Box>
-            <Slide
-              in={isExpanded}
-              direction={"right"}
-              mountOnEnter
-              unmountOnExit
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
+
+          /* Added by Yugant N (05-2026), to Add Tooltip in Sidebar Toggle */
+          <Tooltip
+            key={name}
+            title={!isExpanded ? name : ""}
+            placement="right"
+            arrow
+          >
+            <Box width="100%">
+              <LinkWrapper
+                to={path}
+                onClick={handleClick}
               >
-                <Typography
+                <Box
                   sx={{
-                    fontWeight: "bold",
-                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent:
+                      isExpanded
+                        ? "flex-start"
+                        : "center",
+                    width: "100%",
+                    gap: 1.5,
                   }}
                 >
-                  {name}
-                </Typography>
-              </Box>
-            </Slide>
-          </LinkWrapper>
+
+                  {/* ICON */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      width: 24,
+                    }}
+                  >
+                    {icon}
+                  </Box>
+
+                  {/* TEXT */}
+                  <Slide
+                    in={isExpanded}
+                    direction="right"
+                    mountOnEnter
+                    unmountOnExit
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {name}
+                    </Typography>
+                  </Slide>
+                </Box>
+              </LinkWrapper>
+            </Box>
+          </Tooltip>
+
         ))}
+
+        <Box
+          sx={{
+            width: "100%",
+            mt: 1,
+          }}
+        >
+
+          {/* Added by Yugant N (05-2026), to Add PaletteSelector in Sidebar */}
+          <PaletteSelector />
+        </Box>
       </Box>
 
       {/* Sidebar Footer */}

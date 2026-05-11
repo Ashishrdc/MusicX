@@ -1,97 +1,76 @@
+{/* Modified by Yugant N (05-2026), Minor UI Modifications */}
+
 import {
   TextField,
   InputAdornment,
   Box,
-  Slide,
   ClickAwayListener,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+
 import { CustomButton } from "../buttons/CustomButton";
 import { useLayout } from "../../context/layout/LayoutContext";
 
 export const SearchBar = () => {
+
   const {
-    isSmallScreen,
-    searchMode,
     searchQuery,
     setSearchQuery,
-    toggleSearchMode,
   } = useLayout();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSearchQuery(event.target.value);
   };
 
   const handleClear = () => {
-    searchQuery.length > 0 ? setSearchQuery("") : toggleSearchMode();
-  };
-
-  const handleClickAway = () => {
-    if (searchMode) {
-      toggleSearchMode();
-    }
+    setSearchQuery("");
   };
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
-      <Slide
-        in={!isSmallScreen || searchMode}
-        direction="down"
-        mountOnEnter
-        unmountOnExit
+    <ClickAwayListener onClickAway={() => {}}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+        }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
+        <TextField
+          fullWidth
+          autoFocus
+          autoComplete="off"
+          value={searchQuery}
+          onChange={handleChange}
+          placeholder="Search songs, albums, artists..."
+          variant="outlined"
+          size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+
+            endAdornment: searchQuery.length > 0 && (
+              <InputAdornment position="end">
+
+                <CustomButton
+                  padding={0}
+                  borderRadius={50}
+                  onClick={handleClear}
+                >
+                  <CancelRoundedIcon />
+                </CustomButton>
+
+              </InputAdornment>
+            ),
           }}
-        >
-          <TextField
-            value={searchQuery}
-            onChange={handleChange}
-            placeholder="Search for songs, albums..."
-            variant={searchMode ? "outlined" : "standard"}
-            autoFocus={searchMode}
-            autoComplete="off"
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <>
-                  <Slide
-                    direction="right"
-                    in={searchQuery.length > 0 || searchMode}
-                    mountOnEnter
-                    unmountOnExit
-                  >
-                    <InputAdornment position="end">
-                      <CustomButton
-                        padding={0}
-                        borderRadius={50}
-                        onClick={handleClear}
-                      >
-                        <CancelRoundedIcon />
-                      </CustomButton>
-                    </InputAdornment>
-                  </Slide>
-                  <Slide
-                    direction="right"
-                    in={!searchMode && searchQuery.length === 0}
-                    mountOnEnter
-                    unmountOnExit
-                  >
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  </Slide>
-                </>
-              ),
-            }}
-          />
-        </Box>
-      </Slide>
+        />
+      </Box>
     </ClickAwayListener>
   );
 };

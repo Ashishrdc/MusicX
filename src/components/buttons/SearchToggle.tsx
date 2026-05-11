@@ -2,16 +2,17 @@ import React from "react";
 import { Box } from "@mui/material";
 import { CustomButton } from "./CustomButton";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import { useLayout } from "../../context/layout/LayoutContext";
+import { useNavigate } from "react-router-dom";
 
 export const SearchToggle = React.memo(() => {
-  const { toggleSearchMode } = useLayout();
+  const navigate = useNavigate();
 
   return (
     <Box>
-      <CustomButton onClick={toggleSearchMode}>
+      {/* Modified by Yugant N (05-2026), Navigate to search page instead of toggling UI state */}
+      <CustomButton onClick={()=>navigate("/search")}>
         <SearchRoundedIcon />
-      </CustomButton>
+      </CustomButton> 
     </Box>
   );
 });

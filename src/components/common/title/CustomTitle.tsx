@@ -3,6 +3,7 @@ import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
 import { Box, useTheme } from "@mui/material";
 import { useLayout } from "../../../context/layout/LayoutContext";
 import { createLinearGradient } from "../../../util/helperFunctions";
+import { useNavigate } from "react-router-dom";
 
 interface CustomTitleProps {
   title?: number | string;
@@ -19,6 +20,7 @@ export const CustomTitle = ({
 }: CustomTitleProps) => {
   const theme = useTheme();
   const { sidebarState, isSmallScreen } = useLayout();
+  const navigate = useNavigate(); // Added by Yugant N (05-2026), to Add Navigation to the home page
 
   return (
     <Box
@@ -35,7 +37,8 @@ export const CustomTitle = ({
       }}
     >
       {/* Full state version */}
-      <Box
+      {/* Modified by Yugant N (05-2026), to Add Navigation to the home page */}
+      <Box onClick={()=> navigate("/")}
         sx={{
           display: "flex",
           alignItems: "center",
