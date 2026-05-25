@@ -12,19 +12,19 @@ import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
 import GraphicEqRoundedIcon from "@mui/icons-material/GraphicEqRounded";
 import { useEffect, useMemo, useState } from "react";
-import { SearchResult } from "../components/search/SearchResults";
 import { MediaSection } from "../components/sections/MediaSection";
 import { fetchTrendingSongs } from "../constants/api/services/songService";
 import { SongList } from "../components/player/SongList";
 import { usePlayer } from "../context/player/PlayerContext";
 import { useLayout } from "../context/layout/LayoutContext";
+import { Song } from "../constants/api/interfaces/song";
 
 export const Home = () => {
-  const [trendingSongs, setTrendingSongs] = useState([]);
+  const [trendingSongs, setTrendingSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(false);
 
   const { history, currentSong } = usePlayer();
-  const { searchQuery, isSmallScreen } = useLayout();
+  const { isSmallScreen } = useLayout();
   const theme = useTheme();
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export const Home = () => {
                       wordBreak: "break-word",
                     }}
                   >
-                    {currentSong.title}
+                    {currentSong.name}
                   </Typography>
                 </Stack>
               )}

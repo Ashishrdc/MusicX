@@ -11,7 +11,7 @@ import { AddToPlaylistButton } from "../buttons/AddToPlaylistButton";
 import he from "he";
 
 export const MiniPlayer = () => {
-  const { currentSong, currentTime, duration, stopAndClose } = usePlayer();
+  const { currentSong, currentTime, duration } = usePlayer();
   const { isSmallScreen } = useLayout();
 
   return (

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../util/axios/axiosInstance";
 import { SongList } from "../components/player/SongList";
 import { Box, Typography, alpha, useTheme, IconButton, Tooltip, Skeleton } from "@mui/material";
-import { usePlayer } from "../context/player/PlayerContext";
 import { PlayAllButton } from "../components/buttons/PlayAllButton";
 import { AddAllToQueueButton } from "../components/buttons/AddAllToQueueButton";
 import { useLayout } from "../context/layout/LayoutContext";
@@ -22,7 +21,6 @@ export const AlbumPage = () => {
 
   const [album, setAlbum] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { setQueue } = usePlayer();
 
   useEffect(() => {
     setLoading(true);

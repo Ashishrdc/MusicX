@@ -15,7 +15,7 @@ export const PlaylistDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
-  const { playlists, setAndPlaySong, setQueue } = usePlayer();
+  const { playlists } = usePlayer();
 
   const playlist = playlists.find((p) => p.id === id);
 
