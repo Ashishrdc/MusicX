@@ -54,7 +54,7 @@ export const ArtistPage = () => {
   }, [id]);
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 900, mx: "auto" }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 1100, mx: "auto" }}>
 
       {/* Back */}
       <Tooltip title="Go back">

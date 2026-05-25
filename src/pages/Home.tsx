@@ -62,15 +62,6 @@ export const Home = () => {
         },
         pb: 4,
         gap: 3,
-
-        "&::-webkit-scrollbar": {
-          width: 6,
-        },
-
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: theme.palette.divider,
-          borderRadius: 999,
-        },
       }}
     >
       {/* SEARCH MODE */}
@@ -88,10 +79,12 @@ export const Home = () => {
                 xs: 2.5,
                 md: 4,
               },
-              minHeight: isSmallScreen ? 200 : 260,
+              minHeight: isSmallScreen ? 240 : 260,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexDirection: {xs: "column", md: "row"},
+              alignContent: {xs: "flex-start", md:"center"},
               background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
               color: "white",
               boxShadow: theme.shadows[10],
@@ -100,7 +93,7 @@ export const Home = () => {
             <Box
               sx={{
                 zIndex: 2,
-                maxWidth: 600,
+                maxWidth: { xs: "100%", md:600},
                 display: "flex",
                 flexDirection: "column",
                 gap: 1.5,
@@ -132,7 +125,7 @@ export const Home = () => {
                 variant="body1"
                 sx={{
                   opacity: 0.9,
-                  maxWidth: 520,
+                  maxWidth: { xs: "100%", md: 520},
                 }}
               >
                 Explore trending tracks, continue your sessions, and keep your
@@ -162,6 +155,7 @@ export const Home = () => {
                     variant="body2"
                     sx={{
                       fontWeight: 600,
+                      wordBreak: "break-word",
                     }}
                   >
                     {currentSong.title}

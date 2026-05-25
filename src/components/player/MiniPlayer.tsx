@@ -47,7 +47,7 @@ export const MiniPlayer = () => {
 
           gap: isSmallScreen ? 1 : 2,
 
-          overflow: "hidden",
+          //overflow: "hidden",
         }}
       >
         {/* Left Section - Column 1 */}

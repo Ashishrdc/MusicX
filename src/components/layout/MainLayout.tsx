@@ -32,7 +32,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         transition: "background-color 0.8s ease",
         backgroundColor: playerMode === "fullscreen" ? dominantColor : "none",
         position: "relative",
-        overflowX: "hidden",
+        overflow: "hidden",
         height: "100dvh",
       }}
     >
@@ -55,7 +55,14 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
       )}
 
       {/* Container for sidebar and main content */}
-      <Box sx={{ display: "flex", flex: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flex: 1,
+          overflow: "hidden", // added
+          minHeight: 0, // added
+        }}
+      >
         {/* Sidebar Modal */}
         {isSmallScreen && (
           <Modal
@@ -111,6 +118,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
             flexDirection: "column",
             position: "relative",
             minHeight: 0,
+            overflow: "hidden",
           }}
         >
           {/* Navbar */}

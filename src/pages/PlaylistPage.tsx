@@ -32,7 +32,7 @@ export const PlaylistPage = () => {
   };
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 800, mx: "auto" }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 1100, mx: "auto" }}>
 
       {/* Page Header */}
       <Box sx={{ mb: 4 }}>

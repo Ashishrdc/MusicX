@@ -93,7 +93,7 @@ export const AlbumPage = () => {
   );
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 800, mx: "auto" }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 1300, mx: "auto" }}>
 
       {/* Back */}
       <Tooltip title="Go back">

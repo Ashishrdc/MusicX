@@ -6,9 +6,9 @@ import { useLayout } from "../../context/layout/LayoutContext";
 export const ShuffleToggle = () => {
   const { playerMode } = useLayout();
   return (
-    <Box>
+      <Box>
       <CustomButton hover={false}>
-        <ShuffleRoundedIcon
+      <ShuffleRoundedIcon
           fontSize="small"
           color={playerMode === "fullscreen" ? "secondary" : "primary"}
         />

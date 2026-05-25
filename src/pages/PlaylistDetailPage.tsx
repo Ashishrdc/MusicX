@@ -38,7 +38,7 @@ export const PlaylistDetailPage = () => {
   const coverImages = playlist.songs.slice(0, 4).map((s) => s.image?.[1]?.url).filter(Boolean);
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 800, mx: "auto" }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 }, maxWidth: 1100, mx: "auto" }}>
 
       {/* Back button */}
       <Tooltip title="Back to playlists">
