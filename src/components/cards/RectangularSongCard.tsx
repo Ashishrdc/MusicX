@@ -1,6 +1,7 @@
 import { Box, Typography, Paper } from "@mui/material";
 import { SongCardProps } from "../../constants/interfaces/card.interface";
 import { PlayPauseButton } from "../buttons/PlayPauseButton";
+import { AddToPlaylistButton } from "../buttons/AddToPlaylistButton";
 import { formatSecondsToTime } from "../../util/helperFunctions";
 import he from "he";
 
@@ -19,13 +20,16 @@ export const RectangularSongCard = ({ song }: SongCardProps) => {
         "&:hover": {
           transform: "scale(1.02)",
           backgroundColor: "action.hover",
+          // reveal the playlist button only on hover
+          "& .action-buttons": { opacity: 1 },
         },
       }}
     >
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "60px auto 75px",
+          // shrunk the right column a bit to fit two icon buttons comfortably
+          gridTemplateColumns: "60px auto 90px",
           alignItems: "center",
           gap: 1,
         }}
@@ -64,34 +68,45 @@ export const RectangularSongCard = ({ song }: SongCardProps) => {
             style={{ height: "100%", width: "100%", objectFit: "contain" }}
           />
         </Box>
+
         <Box
           sx={{
-            minWidth: 0, // Ensures that the text container can shrink
+            minWidth: 0,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            overflow: "hidden", // Prevents the text from overflowing
+            overflow: "hidden",
           }}
         >
           <Typography noWrap variant="body2" fontWeight={600}>
             {he.decode(song.name)}
           </Typography>
           <Typography noWrap variant="subtitle2" color="text.secondary">
-            {song.artists.primary
-              .map((artist) => he.decode(artist.name))
-              .join(", ")}
+            {song.artists.primary.map((a) => he.decode(a.name)).join(", ")}
           </Typography>
           <Typography variant="subtitle2" color="text.secondary">
             {formatSecondsToTime(song.duration)}
           </Typography>
         </Box>
+
+        {/* Right actions — play is always visible, playlist button fades in */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            gap: 0.25,
           }}
         >
+          {/* Playlist button hidden until row is hovered */}
+          <Box
+            className="action-buttons"
+            sx={{ opacity: 0, transition: "opacity 0.2s ease" }}
+          >
+          {/* Added by Yugant N (05-2026), Add Playlist Button */}
+            <AddToPlaylistButton song={song} />
+          </Box>
+
           <PlayPauseButton song={song} />
         </Box>
       </Box>

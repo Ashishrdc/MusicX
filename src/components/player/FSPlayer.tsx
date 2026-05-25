@@ -4,6 +4,7 @@ import { PlayerControls } from "./PlayerControls";
 import { usePlayer } from "../../context/player/PlayerContext";
 import he from "he";
 import { formatSecondsToTime } from "../../util/helperFunctions";
+import { AddToPlaylistButton } from "../buttons/AddToPlaylistButton";
 
 export const FSPlayer = () => {
   const {
@@ -131,6 +132,8 @@ export const FSPlayer = () => {
         }}
       >
         <PlayerControls />
+        {/* Added by Yugant N (05-2026), Add to Playlist Button */}
+        {currentSong && <AddToPlaylistButton song={currentSong} />}
       </Box>
     </Box>
   );

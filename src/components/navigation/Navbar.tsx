@@ -1,5 +1,4 @@
-import { Box, Collapse, Fade, Slide } from "@mui/material";
-import { SearchBar } from "../search/SearchBar";
+import { Box, Fade, Slide } from "@mui/material";
 import { ThemeToggle } from "../buttons/ThemeToggle";
 import { SidebarToggle } from "../buttons/SidebarToggle";
 import { useLayout } from "../../context/layout/LayoutContext";
@@ -38,16 +37,8 @@ export const Navbar = () => {
         </Slide>
       </Box>
 
-      {/* SearchBar (hidden on small screens) */}
-
-      <Collapse
-        in={!isSmallScreen}
-        timeout={1000}
-        sx={{ width: "100%" }}
-        unmountOnExit
-      >
-        <SearchBar />
-      </Collapse>
+      {/* CENTER SPACE */}
+      <Box sx={{ flex: 1 }} />
 
       {/* Right-side controls */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>

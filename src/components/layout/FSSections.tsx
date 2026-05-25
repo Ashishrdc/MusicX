@@ -1,14 +1,13 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Box, Slide, Tabs, Tab, Divider } from "@mui/material";
+import { Box, Slide, Tabs, Tab, Divider, Tooltip } from "@mui/material";
 import { CustomButton } from "../buttons/CustomButton";
 import { useLayout } from "../../context/layout/LayoutContext";
-import { CenteredFlexBox } from "../common/box/CenteredFlexBox";
 import { Lyrics } from "../player/Lyrics";
 import { FSPlayer } from "../player/FSPlayer";
-
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
+import QueueContent from "../queue/QueueContent";
 
 interface Section {
   id: string;
@@ -27,13 +26,15 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
   const defaultSections = [
     {
       id: "lyrics",
-      title: <LyricsRoundedIcon />,
+      /* Modified by Yugant N (05-2026), to Add Tooltip */
+      title: <Tooltip title="Lyrics" placement="left"><Box><LyricsRoundedIcon /></Box></Tooltip>,
       component: <Lyrics />,
     },
     {
       id: "queue",
-      title: <QueueMusicRoundedIcon />,
-      component: <CenteredFlexBox>Queue Content</CenteredFlexBox>,
+      /* Modified by Yugant N (05-2026), to Add Tooltip and QueueContent */
+      title: <Tooltip title="Queue content" placement="left"><Box><QueueMusicRoundedIcon /></Box></Tooltip>,
+      component: <QueueContent />,
     },
   ];
 

@@ -1,6 +1,14 @@
+{/* Modified by Yugant N (05-2026), new attributes added */}
+
 import { createContext, useContext } from "react";
 import { Song } from "../../constants/api/interfaces/song";
 import { RepeatMode } from "../../constants/types/common.types";
+
+export interface Playlist {
+  id: string;
+  name: string;
+  songs: Song[];
+}
 
 interface PlayerContextType {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
@@ -9,11 +17,13 @@ interface PlayerContextType {
   repeatMode: RepeatMode;
   volume: number;
   queue: Song[];
-  playlist: Song[];
-  currentTime: number; // Added
-  duration: number; // Added
+  playlists: Playlist[];
+  currentTime: number;
+  duration: number;
   dominantColor: string | null;
-  setCurrentTime: (time: number) => void; // Added
+  history: Song[];
+  setQueue: React.Dispatch<React.SetStateAction<Song[]>>;
+  setCurrentTime: (time: number) => void;
   setCurrentSong: (song: Song) => void;
   setAndPlaySong: (song: Song) => void;
   toggleRepeatMode: () => void;
@@ -22,13 +32,16 @@ interface PlayerContextType {
   playNext: () => void;
   playPrevious: () => void;
   setVolume: (volume: number) => void;
-  addToPlaylist: (song: Song) => void;
-  setPlaylist?: (songs: Song[]) => void;
-  removeFromPlaylist: (songId: string) => void;
+  createPlaylist: (name: string) => void;
+  addSongToPlaylist: (playlistId: string, song: Song) => void;
+  removeSongFromPlaylist: (playlistId: string, songId: string) => void;
+  deletePlaylist: (playlistId: string) => void;
   addToQueue: (song: Song) => void;
   clearQueue: () => void;
   removeFromQueue: (songId: string) => void;
   getNextSong: () => Song | string;
+  stopAndClose: () => void;
+  renamePlaylist: (playlistId: string, newName: string) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(

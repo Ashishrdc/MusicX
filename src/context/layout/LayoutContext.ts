@@ -26,6 +26,10 @@ interface LayoutContextType {
   selectTheme: (newTheme: ThemeName) => void;
   toggleViewMode: () => void;
   toggleSearchMode: () => void;
+  
+  /*Added by Yugant N (05-2026), Set Theme Color */
+  themeColor: string;
+  setThemeColor: (color: string) => void;
 }
 
 export const LayoutContext = createContext<LayoutContextType | undefined>(

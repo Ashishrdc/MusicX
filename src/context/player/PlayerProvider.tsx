@@ -1,3 +1,5 @@
+{/* Modified by Yugant N (05-2026), New states and functions added */}
+
 import React, {
   ReactNode,
   useEffect,
@@ -6,7 +8,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { PlayerContext } from "./PlayerContext";
+import { PlayerContext, Playlist } from "./PlayerContext";
 import { RepeatMode } from "../../constants/types/common.types";
 import { Song } from "../../constants/api/interfaces/song";
 import { getDominantColorFromImage } from "../../util/helperFunctions";
@@ -15,22 +17,35 @@ import he from "he";
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // States
-  const [currentSong, setCurrentSong] = useState<Song | null>(null);
+  // -------------------------States-------------------------- //
+  const [currentSong, setCurrentSong] = useState<Song | null>(() => {
+    const saved = localStorage.getItem("currentSong");
+    return saved ? JSON.parse(saved) : null;
+  });
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
   const [volume, setVolume] = useState<number>(1);
-  const [playlist, setPlaylist] = useState<Song[]>([]);
+  const [playlists, setPlaylists] = useState<Playlist[]>(() => {
+    const saved = localStorage.getItem("playlists");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [queue, setQueue] = useState<Song[]>([]);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState<number>(() => {
+    const saved = localStorage.getItem("currentTime");
+    return saved ? parseFloat(saved) : 0;
+  });
   const [duration, setDuration] = useState(0);
   const [dominantColor, setDominantColor] = useState<string | null>(null);
+  const [history, setHistory] = useState<Song[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Ref
+  // -------------------------Refs-------------------------- //
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isFirstMount = useRef(true);
+  const currentTimeRef = useRef(currentTime);
 
-  //-----------------------------Functions--------------------------------//
-  // Helper function for safe playback
+  // -------------------------Functions-------------------------- //
+
   const safePlay = () => {
     if (audioRef.current) {
       audioRef.current.play().catch((err) => {
@@ -39,307 +54,321 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // Playback Controls
-  const play = useCallback(() => {
-    setIsPlaying(true);
-  }, []);
+  const play = useCallback(() => setIsPlaying(true), []);
+  const pause = useCallback(() => setIsPlaying(false), []);
 
-  const pause = useCallback(() => {
-    setIsPlaying(false);
-  }, []);
-
-  // Helper function to set the current song and ensure it's in the queue
   const setAndPlaySong = useCallback(
     (song: Song) => {
-      // Check if the song is already in the queue
-      const songInQueue = queue.some((queuedSong) => queuedSong.id === song.id);
-
-      // Add to queue if it's not already there
+      const songInQueue = queue.some((q) => q.id === song.id);
       if (!songInQueue) {
-        setQueue((prevQueue) => [...prevQueue, song]);
+        setQueue((prev) => [...prev, song]);
       }
-
-      // Set as the current song and play it
       setCurrentSong(song);
     },
     [queue]
   );
 
-  // Play Next Song with queue handling
   const playNext = useCallback(() => {
-    if (!queue.length) return; // No songs in queue
+    if (!queue.length) return;
 
     const currentIndex = currentSong
       ? queue.findIndex((song) => song.id === currentSong.id)
       : -1;
 
     if (repeatMode === "one") {
-      // If repeatMode is "one", allow next only within the queue, don't jump
-      if (currentIndex === -1 || currentIndex === queue.length - 1) {
-        return; // Stay on the current song if no next song
-      } else {
-        setAndPlaySong(queue[currentIndex + 1]); // Play the next song
-      }
+      if (currentIndex === -1 || currentIndex === queue.length - 1) return;
+      setAndPlaySong(queue[currentIndex + 1]);
     } else if (currentIndex === -1 || currentIndex === queue.length - 1) {
       if (repeatMode === "all") {
-        setAndPlaySong(queue[0]); // Loop back to the start of the queue
+        setAndPlaySong(queue[0]);
       } else {
-        setIsPlaying(false); // Stop playback if no more songs and repeatMode is off
+        setIsPlaying(false);
         audioRef.current?.pause();
       }
     } else {
-      setAndPlaySong(queue[currentIndex + 1]); // Play the next song
+      setAndPlaySong(queue[currentIndex + 1]);
     }
   }, [queue, currentSong, repeatMode, setAndPlaySong]);
 
-  // Play Previous Song
   const playPrevious = useCallback(() => {
     if (!queue.length || !currentSong) return;
 
     const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
 
     if (repeatMode === "one") {
-      // If repeatMode is "one", allow previous only within the queue, don't jump
-      if (currentIndex > 0) {
-        setAndPlaySong(queue[currentIndex - 1]); // Play the previous song
-      } else {
-        return; // Stay on the first song, do not move back
-      }
+      if (currentIndex > 0) setAndPlaySong(queue[currentIndex - 1]);
     } else if (currentIndex > 0) {
-      setAndPlaySong(queue[currentIndex - 1]); // Play the previous song
+      setAndPlaySong(queue[currentIndex - 1]);
     } else if (repeatMode === "all") {
-      setAndPlaySong(queue[queue.length - 1]); // Loop back to the last song
+      setAndPlaySong(queue[queue.length - 1]);
     } else {
-      pause(); // No more previous songs, stop playing
+      pause();
     }
   }, [queue, currentSong, repeatMode, setAndPlaySong, pause]);
 
-  // Handle song end
   const handleSongEnd = useCallback(() => {
     if (repeatMode === "one") {
-      safePlay(); // Replay the current song
+      safePlay();
     } else {
-      playNext(); // Play the next song in the queue or stop based on repeatMode
+      playNext();
     }
   }, [playNext, repeatMode]);
 
-  // Get next song
   const getNextSong = useCallback(() => {
-    if (!queue.length || !currentSong) {
-      return "End of list";
-    }
+    if (!queue.length || !currentSong) return "End of list";
 
     const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
 
-    // If repeatMode is "one", repeat the current song
-    if (repeatMode === "one") {
-      return "Repeating current song";
-    }
+    if (repeatMode === "one") return "Repeating current song";
+    if (repeatMode === "off" && currentIndex === queue.length - 1) return "End of list";
+    if (repeatMode === "all" && currentIndex === queue.length - 1) return queue[0];
 
-    // If repeatMode is "off" and the current song is the last in the queue
-    if (repeatMode === "off" && currentIndex === queue.length - 1) {
-      return "End of list";
-    }
-
-    // If repeatMode is "all" and the current song is the last, loop back to the first song
-    if (repeatMode === "all" && currentIndex === queue.length - 1) {
-      return queue[0]; // Return the first song in the queue
-    }
-
-    // Return the next song in the queue if available
     return queue[currentIndex + 1] || "End of list";
   }, [queue, currentSong, repeatMode]);
 
-  // Playlist functions
-  const addToPlaylist = useCallback(
-    (song: Song) => setPlaylist([...playlist, song]),
-    [playlist]
-  );
-  const removeFromPlaylist = useCallback(
-    (songId: string) =>
-      setPlaylist(playlist.filter((song) => song.id !== songId)),
-    [playlist]
-  );
-
-  // Queue functions
   const addToQueue = useCallback(
-    (song: Song) => setQueue([...queue, song]),
-    [queue]
+    (song: Song) => setQueue((prev) => [...prev, song]),
+    []
   );
+
   const removeFromQueue = useCallback(
-    (songId: string) => setQueue(queue.filter((song) => song.id !== songId)),
-    [queue]
+    (songId: string) => setQueue((prev) => prev.filter((s) => s.id !== songId)),
+    []
   );
-  const clearQueue = () => setQueue([]);
 
-  // ---------------------Toggles---------------------- //
+  const clearQueue = useCallback(() => setQueue([]), []);
 
-  // Toggle repeat mode (off -> one -> all -> off)
-  const toggleRepeatMode = () => {
-    setRepeatMode((prevMode) => {
-      switch (prevMode) {
-        case "off":
-          return "one";
-        case "one":
-          return "all";
-        case "all":
-          return "off";
-        default:
-          return "off";
+  const createPlaylist = useCallback((name: string) => {
+    const newPlaylist: Playlist = { id: Date.now().toString(), name, songs: [] };
+    setPlaylists((prev) => [...prev, newPlaylist]);
+  }, []);
+
+  const addSongToPlaylist = useCallback((playlistId: string, song: Song) => {
+    setPlaylists((prev) =>
+      prev.map((p) =>
+        p.id === playlistId && !p.songs.find((s) => s.id === song.id)
+          ? { ...p, songs: [...p.songs, song] }
+          : p
+      )
+    );
+  }, []);
+
+  const renamePlaylist = useCallback((playlistId: string, newName: string) => {
+    setPlaylists((prev) =>
+      prev.map((p) => (p.id === playlistId ? { ...p, name: newName } : p))
+    );
+  }, []);
+
+  const removeSongFromPlaylist = useCallback((playlistId: string, songId: string) => {
+    setPlaylists((prev) =>
+      prev.map((p) =>
+        p.id === playlistId
+          ? { ...p, songs: p.songs.filter((s) => s.id !== songId) }
+          : p
+      )
+    );
+  }, []);
+
+  const deletePlaylist = useCallback((playlistId: string) => {
+    setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
+  }, []);
+
+  const toggleRepeatMode = useCallback(() => {
+    setRepeatMode((prev) => {
+      switch (prev) {
+        case "off": return "one";
+        case "one": return "all";
+        case "all": return "off";
+        default: return "off";
       }
     });
-  };
+  }, []);
 
-  // --------------------SideEffects ------------------//
+  const stopAndClose = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+    setIsPlaying(false);
+    setCurrentSong(null);
+    setCurrentTime(0);
+    setDuration(0);
+    localStorage.removeItem("currentSong");
+    localStorage.removeItem("currentTime");
+  }, []);
 
-  // Volume Control
+  // -------------------------Side Effects-------------------------- //
+
+  // Volume control
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = volume;
   }, [volume]);
 
-  // Attach "ended" event listener to handleSongEnd
+  // Song end listener
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       audio.addEventListener("ended", handleSongEnd);
-      return () => {
-        audio.removeEventListener("ended", handleSongEnd);
-      };
+      return () => audio.removeEventListener("ended", handleSongEnd);
     }
   }, [handleSongEnd]);
 
-  // Automatically play when a new song is set
-  // Update currentTime and duration on song change
+  // Load song into audio element — handles both first mount restore and normal song changes
   useEffect(() => {
-    if (audioRef.current && currentSong) {
+    if (!audioRef.current || !currentSong) return;
+
+    if (isFirstMount.current) {
+      // Restore session: load and seek to saved timestamp, but don't autoplay
+      isFirstMount.current = false;
       audioRef.current.src = currentSong.downloadUrl[4].url;
       audioRef.current.load();
-      setCurrentTime(0);
-      setDuration(currentSong.duration || audioRef.current.duration);
-      safePlay();
-      play();
-    }
-  }, [currentSong, play]);
+      setDuration(currentSong.duration || 0);
 
-  // Update currentTime on timeupdate
+      const onCanPlay = () => {
+        if (audioRef.current) {
+          audioRef.current.currentTime = currentTimeRef.current;
+        }
+      };
+      audioRef.current.addEventListener("canplay", onCanPlay, { once: true });
+      return;
+    }
+
+    // Normal song change: load, seek to 0, and autoplay
+    audioRef.current.src = currentSong.downloadUrl[4].url;
+    audioRef.current.load();
+    setCurrentTime(0);
+    currentTimeRef.current = 0;
+    localStorage.setItem("currentTime", "0");
+    setDuration(currentSong.duration || audioRef.current.duration);
+    safePlay();
+    play();
+  }, [currentSong]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update history when song changes
+  useEffect(() => {
+    if (currentSong) {
+      setHistory((prev) => {
+        const exists = prev.find((s) => s.id === currentSong.id);
+        if (exists) return prev;
+        return [currentSong, ...prev].slice(0, 5);
+      });
+    }
+  }, [currentSong]);
+
+  // Track current time — update state and ref, save to localStorage every 5s
   useEffect(() => {
     const audio = audioRef.current;
 
     const updateTime = () => {
-      if (audio) {
-        setCurrentTime(audio.currentTime);
-      }
+      if (!audio) return;
+      setCurrentTime(audio.currentTime);
+      currentTimeRef.current = audio.currentTime;
     };
+
+    const saveInterval = setInterval(() => {
+      localStorage.setItem("currentTime", String(currentTimeRef.current));
+    }, 5000);
 
     if (audio) {
       audio.addEventListener("timeupdate", updateTime);
       return () => {
         audio.removeEventListener("timeupdate", updateTime);
+        clearInterval(saveInterval);
       };
     }
   }, []);
 
-  // Play or Pause the playback
+  // Save current time immediately before page unload
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.setItem("currentTime", String(currentTimeRef.current));
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, []);
+
+  // Play / Pause
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current
-          .play()
-          .catch((err) => console.error("Error playing audio: ", err));
+        audioRef.current.play().catch((err) => console.error("Error playing audio:", err));
       } else {
         audioRef.current.pause();
       }
     }
   }, [isPlaying]);
 
-  // Fetch the dominant color when the song changes or the component mounts
+  // Dominant color from album art
   useEffect(() => {
-    if (currentSong && currentSong.image && currentSong.image[1]?.url) {
+    if (currentSong?.image?.[1]?.url) {
       getDominantColorFromImage(currentSong.image[1].url)
-        .then((color) => {
-          setDominantColor(color);
-        })
-        .catch((error) => {
-          console.error("Error fetching dominant color:", error);
-        });
+        .then(setDominantColor)
+        .catch((err) => console.error("Error fetching dominant color:", err));
     }
   }, [currentSong]);
 
-  // Save playlist and queue to localStorage
+  // Persist currentSong to localStorage
   useEffect(() => {
-    localStorage.setItem("playlist", JSON.stringify(playlist));
-    localStorage.setItem("queue", JSON.stringify(queue));
-  }, [playlist, queue]);
+    if (!isLoaded) return;
+    if (currentSong) {
+      localStorage.setItem("currentSong", JSON.stringify(currentSong));
+    } else {
+      localStorage.removeItem("currentSong");
+    }
+  }, [currentSong, isLoaded]);
 
-  // Load playlist and queue from localStorage on mount
+  // Persist queue and history to localStorage
   useEffect(() => {
-    const savedPlaylist = localStorage.getItem("playlist");
+    if (!isLoaded) return;
+    localStorage.setItem("queue", JSON.stringify(queue));
+    localStorage.setItem("history", JSON.stringify(history));
+  }, [queue, history, isLoaded]);
+
+  // Persist playlists to localStorage
+  useEffect(() => {
+    if (!isLoaded) return;
+    localStorage.setItem("playlists", JSON.stringify(playlists));
+  }, [playlists, isLoaded]);
+
+  // Load queue and history from localStorage on mount
+  useEffect(() => {
     const savedQueue = localStorage.getItem("queue");
-    if (savedPlaylist) setPlaylist(JSON.parse(savedPlaylist));
+    const savedHistory = localStorage.getItem("history");
     if (savedQueue) setQueue(JSON.parse(savedQueue));
+    if (savedHistory) setHistory(JSON.parse(savedHistory));
+    setIsLoaded(true);
   }, []);
 
-  //-------------------------Media Session----------------------//
+  // -------------------------Media Session-------------------------- //
   useEffect(() => {
     if (audioRef.current && currentSong && "mediaSession" in navigator) {
-      // Update Media Metadata dynamically on song change
       navigator.mediaSession.metadata = new MediaMetadata({
         title: he.decode(currentSong.name),
-        artist: currentSong.artists.primary
-          .map((artist) => he.decode(artist.name))
-          .join(","),
+        artist: currentSong.artists.primary.map((a) => he.decode(a.name)).join(", "),
         album: currentSong.album.name,
         artwork: [
-          {
-            src: currentSong.image[0]?.url,
-            sizes: "96x96",
-            type: "image/png",
-          },
-          {
-            src: currentSong.image[0]?.url,
-            sizes: "128x128",
-            type: "image/png",
-          },
-          {
-            src: currentSong.image[1]?.url,
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: currentSong.image[2]?.url,
-            sizes: "512x512",
-            type: "image/png",
-          },
+          { src: currentSong.image[0]?.url, sizes: "96x96", type: "image/png" },
+          { src: currentSong.image[0]?.url, sizes: "128x128", type: "image/png" },
+          { src: currentSong.image[1]?.url, sizes: "192x192", type: "image/png" },
+          { src: currentSong.image[2]?.url, sizes: "512x512", type: "image/png" },
         ],
       });
 
-      // Set action handlers only once to avoid redundancy
-      const setMediaSessionHandlers = () => {
-        navigator.mediaSession.setActionHandler("play", play);
-        navigator.mediaSession.setActionHandler("pause", pause);
-        navigator.mediaSession.setActionHandler("previoustrack", playPrevious);
-        navigator.mediaSession.setActionHandler("nexttrack", playNext);
-        navigator.mediaSession.setActionHandler("seekforward", () => {
-          if (audioRef.current) {
-            audioRef.current.currentTime = Math.min(
-              audioRef.current.duration,
-              audioRef.current.currentTime + 10
-            );
-          }
-        });
-        navigator.mediaSession.setActionHandler("seekbackward", () => {
-          if (audioRef.current) {
-            audioRef.current.currentTime = Math.max(
-              0,
-              audioRef.current.currentTime - 10
-            );
-          }
-        });
-      };
+      navigator.mediaSession.setActionHandler("play", play);
+      navigator.mediaSession.setActionHandler("pause", pause);
+      navigator.mediaSession.setActionHandler("previoustrack", playPrevious);
+      navigator.mediaSession.setActionHandler("nexttrack", playNext);
+      navigator.mediaSession.setActionHandler("seekforward", () => {
+        if (audioRef.current) {
+          audioRef.current.currentTime = Math.min(audioRef.current.duration, audioRef.current.currentTime + 10);
+        }
+      });
+      navigator.mediaSession.setActionHandler("seekbackward", () => {
+        if (audioRef.current) {
+          audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+        }
+      });
 
-      setMediaSessionHandlers();
-
-      // Cleanup function to reset the media session on component unmount or song change
       return () => {
         navigator.mediaSession.setActionHandler("play", null);
         navigator.mediaSession.setActionHandler("pause", null);
@@ -351,7 +380,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [currentSong, play, pause, playNext, playPrevious]);
 
-  // Memoize context value
+  // -------------------------Context Value-------------------------- //
   const contextValue = useMemo(
     () => ({
       audioRef,
@@ -359,49 +388,59 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       isPlaying,
       repeatMode,
       volume,
-      playlist,
+      playlists,
       queue,
+      setQueue,
       currentTime,
       duration,
       dominantColor,
-      setDominantColor,
-      toggleRepeatMode,
+      history,
+      setCurrentTime,
       setCurrentSong,
       setAndPlaySong,
-      setCurrentTime,
+      toggleRepeatMode,
       play,
       pause,
       playNext,
       playPrevious,
       setVolume,
-      addToPlaylist,
-      removeFromPlaylist,
+      createPlaylist,
+      addSongToPlaylist,
+      renamePlaylist,
+      removeSongFromPlaylist,
+      deletePlaylist,
       addToQueue,
       clearQueue,
       removeFromQueue,
       getNextSong,
+      stopAndClose,
     }),
     [
       currentSong,
       isPlaying,
       repeatMode,
       volume,
-      playlist,
+      playlists,
       queue,
       currentTime,
       duration,
       dominantColor,
+      history,
       play,
       pause,
       playNext,
       playPrevious,
-      setVolume,
-      addToPlaylist,
-      removeFromPlaylist,
-      addToQueue,
-      removeFromQueue,
       setAndPlaySong,
+      createPlaylist,
+      addSongToPlaylist,
+      renamePlaylist,
+      removeSongFromPlaylist,
+      deletePlaylist,
+      addToQueue,
+      clearQueue,
+      removeFromQueue,
       getNextSong,
+      stopAndClose,
     ]
   );
 
