@@ -1,5 +1,4 @@
 import { Box, Slide } from "@mui/material";
-import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 import { useLayout } from "../../context/layout/LayoutContext";
 import { ReactNode } from "react";
 
@@ -33,16 +32,6 @@ export const FSLayout = ({ children }: { children: ReactNode }) => {
           }}
         >
           {children}
-        </Box>
-        {/* Toggle button for fullscreen player */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: 15,
-            right: 15,
-          }}
-        >
-          <FSPlayerToggle />
         </Box>
       </Box>
     </Slide>

@@ -10,12 +10,12 @@ interface SongList {
 }
 
 export const SongList = ({ songs }: SongList) => {
-  const { setCurrentSong } = usePlayer();
+  const { setAndPlaySong } = usePlayer();
   const { viewMode } = useLayout();
 
   const handlePlaySong = (song: Song) => {
     // Logic to play the song
-    setCurrentSong(song);
+    setAndPlaySong(song);
     console.log(`Playing song: ${song.name}`);
   };
 
@@ -40,13 +40,13 @@ export const SongList = ({ songs }: SongList) => {
                   lg: "repeat(6, 1fr)", // 6 columns on large screens when there are few songs
                 }
             : viewMode === "list"
-            ? {
-                xs: "repeat(1, 1fr)", // 2 columns for extra small screens
-                sm: "repeat(1, 1fr)", // 3 columns for small screens
-                md: "repeat(2, 1fr)", // 4 columns for medium screens
-                lg: "repeat(3, 1fr)", // 5 columns for large screens
-              }
-            : "none",
+              ? {
+                  xs: "repeat(1, 1fr)", // 2 columns for extra small screens
+                  sm: "repeat(1, 1fr)", // 3 columns for small screens
+                  md: "repeat(2, 1fr)", // 4 columns for medium screens
+                  lg: "repeat(3, 1fr)", // 5 columns for large screens
+                }
+              : "none",
         transition: "all 0.3s ease",
         padding: 1,
         marginBottom: 1,
@@ -62,7 +62,7 @@ export const SongList = ({ songs }: SongList) => {
           />
         ) : (
           <BoxSongCard key={song.id} song={song} onPlay={handlePlaySong} />
-        )
+        ),
       )}
     </Box>
   );

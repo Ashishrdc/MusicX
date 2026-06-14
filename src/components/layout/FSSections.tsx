@@ -8,6 +8,7 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import LyricsRoundedIcon from "@mui/icons-material/LyricsRounded";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
 import QueueContent from "../queue/QueueContent";
+import { FSPlayerToggle } from "../buttons/FSPlayerToggle";
 
 interface Section {
   id: string;
@@ -25,27 +26,39 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
 
   const defaultSections = [
     {
-      id: "lyrics",
-      /* Modified by Yugant N (05-2026), to Add Tooltip */
-      title: <Tooltip title="Lyrics" placement="left"><Box><LyricsRoundedIcon /></Box></Tooltip>,
-      component: <Lyrics />,
-    },
-    {
       id: "queue",
       /* Modified by Yugant N (05-2026), to Add Tooltip and QueueContent */
-      title: <Tooltip title="Queue content" placement="left"><Box><QueueMusicRoundedIcon /></Box></Tooltip>,
+      title: (
+        <Tooltip title="Queue" placement="left" disableInteractive>
+          <Box>
+            <QueueMusicRoundedIcon />
+          </Box>
+        </Tooltip>
+      ),
       component: <QueueContent />,
+    },
+    {
+      id: "lyrics",
+      /* Modified by Yugant N (05-2026), to Add Tooltip */
+      title: (
+        <Tooltip title="Lyrics" placement="left" disableInteractive>
+          <Box>
+            <LyricsRoundedIcon fontSize="small" />
+          </Box>
+        </Tooltip>
+      ),
+      component: <Lyrics />,
     },
   ];
 
   // Use default sections if none are provided
   const [currentSections, setCurrentSections] = useState<Section[]>(
-    sections || defaultSections
+    sections || defaultSections,
   );
 
   // Initialize with the first section's id
   const [activeSection, setActiveSection] = useState<string>(
-    currentSections[0].id
+    currentSections[0].id,
   );
 
   const handleToggleSection = (id: string) => {
@@ -82,19 +95,34 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
     <Box
       sx={{
         display: "flex",
-        flexDirection: isSmallScreen ? "column" : "row",
+        flexDirection: "column",
         height: "100%",
         width: "100%",
         borderRadius: 2,
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
       }}
     >
-      {/* Top Row: Content */}
       <Box
         sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: 1,
+        }}
+      >
+        <Box>{activeSection.toLocaleUpperCase()}</Box>
+        <FSPlayerToggle />
+      </Box>
+      {/* Top Row: Content */}
+      <Divider orientation="horizontal" flexItem />
+      <Box
+        sx={{
+          display: "flex",
+          height: "100%",
           flex: 1,
           position: "relative",
           overflow: "hidden",
+          width: "100%",
         }}
       >
         {currentSections.map((section) => (
@@ -118,23 +146,12 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           </Slide>
         ))}
       </Box>
-      <Divider orientation={isSmallScreen ? "horizontal" : "vertical"} flexItem>
-        <Box
-          sx={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            backgroundColor: "black",
-          }}
-        />
-      </Divider>
-      {/* Bottom Row: Toggle Buttons or Tabs */}
+      <Divider orientation="horizontal" flexItem />
       <Box
         sx={{
           display: "flex",
-          flexDirection: isSmallScreen ? "row" : "column",
-          height: isSmallScreen ? "fit-content" : "100%",
-          width: isSmallScreen ? "100%" : "fit-content",
+          flexDirection: "row",
+          width: "100%",
           justifyContent: "center",
           alignItems: "center",
           padding: tabs ? 0.5 : 1,
@@ -144,11 +161,12 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
         {tabs ? (
           <Tabs
             variant={currentSections.length > 5 ? "scrollable" : "fullWidth"}
-            orientation={isSmallScreen ? "horizontal" : "vertical"}
+            orientation={"horizontal"}
             value={activeSection}
             onChange={(_event, newValue) => handleToggleSection(newValue)}
             sx={{
-              width: isSmallScreen ? "100%" : "auto",
+              width: "auto",
+              flexGrow: 1,
             }}
           >
             {currentSections.map((section) => (
@@ -174,6 +192,22 @@ export const FSSections = ({ sections, tabs = false }: FSSectionsProps) => {
           ))
         )}
       </Box>
+      {/* Bottom Row: Toggle Buttons or Tabs */}
+
+      {/* <Box
+        sx={{
+          display: "flex",
+          height: "100%",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {!isSmallScreen && (
+          <Box sx={{ display: "flex", height: "40%", py: 1 }}>
+            <FSPlayerToggle />
+          </Box>
+        )}
+      </Box> */}
     </Box>
   );
 };

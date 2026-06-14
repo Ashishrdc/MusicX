@@ -8,13 +8,31 @@ export type RepeatMode = "off" | "one" | "all";
 
 export type PlayerMode = "mini" | "fullscreen";
 
+// export type ThemeName =
+//   | "orangered"
+//   | "pink"
+//   | "hotpink"
+//   | "purple"
+//   | "blue"
+//   | "lightblue"
+//   | "yellow"
+//   | "gold"
+//   | "raspberry";
+
 export type ThemeName =
   | "orangered"
-  | "pink"
   | "hotpink"
   | "purple"
   | "blue"
   | "lightblue"
-  | "yellow"
-  | "gold"
-  | "raspberry";
+  | "oldGold"
+  | "darkGold"
+  | "raspberry"
+  | "slate"
+  | "indigo"
+  | "teal"
+  | "emerald"
+  | "cyan"
+  | "violet"
+  | "rose"
+  | "amber";

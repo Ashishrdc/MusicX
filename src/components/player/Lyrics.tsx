@@ -15,6 +15,8 @@ export const Lyrics = React.memo(() => {
   const [lyricsData, setLyricsData] = useState<LyricsData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Lyrics Endpoint -> https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&lyrics_id=K8GXHF5k&ctx=wap6dot0&api_version=4&_format=json&_marker=0
+  
   // Fetch lyrics when the current song changes
   useEffect(() => {
     const fetchLyrics = async () => {
