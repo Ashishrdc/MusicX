@@ -1,22 +1,12 @@
-{/* Added by Yugant N (05-2026), to Add PaletteSelector in App Sidebar */}
+{
+  /* Added by Yugant N (05-2026), to Add PaletteSelector in App Sidebar */
+}
 
 import { Box, Tooltip, Typography, Popover } from "@mui/material";
 import { useState } from "react";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { useLayout } from "../../context/layout/LayoutContext";
-
-const themeColors: Record<string, string> = {
-  orangered: "#FF5722",
-  pink: "#FFC0CB",
-  hotpink: "#FF69B4",
-  purple: "#9C27B0",
-  blue: "#2196F3",
-  lightblue: "#03A9F4",
-  yellow: "#FFEB3B",
-  gold: "#FFD700",
-  raspberry: "#E30B5D",
-};
-
+import { themeColors } from "../../theme/palette";
 export const PaletteSelector = () => {
   const { sidebarState, themeColor, setThemeColor } = useLayout();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -37,7 +27,10 @@ export const PaletteSelector = () => {
 
   return (
     <>
-      <Tooltip title={!isExpanded ? "Theme Color" : ""} placement="right">
+      <Tooltip
+        disableInteractive title={!isExpanded ? "Theme Color" : ""}
+        placement="bottom"
+      >
         <Box
           onClick={handleOpen}
           sx={{
@@ -79,14 +72,13 @@ export const PaletteSelector = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{ vertical: "center", horizontal: "right" }}
-        transformOrigin={{ vertical: "center", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
         slotProps={{
           paper: {
             sx: {
               p: 1.5,
               borderRadius: 3,
               boxShadow: 6,
-              width: 180,
             },
           },
         }}
@@ -100,9 +92,26 @@ export const PaletteSelector = () => {
           THEME COLOR
         </Typography>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            width: 145,
+            py: 0.5,
+            gap: 1,
+          }}
+        >
           {Object.entries(themeColors).map(([name, hex]) => (
-            <Tooltip key={name} title={name} placement="top">
+            <Tooltip
+              disableInteractive
+              key={name}
+              title={
+                <Typography variant="body1">
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </Typography>
+              }
+              placement="top"
+            >
               <Box
                 onClick={() => handleSelect(name)}
                 sx={{
@@ -112,7 +121,10 @@ export const PaletteSelector = () => {
                   backgroundColor: hex,
                   cursor: "pointer",
                   flexShrink: 0,
-                  border: themeColor === name ? "3px solid white" : "3px solid transparent",
+                  border:
+                    themeColor === name
+                      ? "3px solid white"
+                      : "3px solid transparent",
                   outline: themeColor === name ? `2px solid ${hex}` : "none",
                   transition: "all 0.2s ease",
                   "&:hover": { transform: "scale(1.2)" },

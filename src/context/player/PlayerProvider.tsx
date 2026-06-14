@@ -1,4 +1,6 @@
-{/* Modified by Yugant N (05-2026), New states and functions added */}
+{
+  /* Modified by Yugant N (05-2026), New states and functions added */
+}
 
 import React, {
   ReactNode,
@@ -64,8 +66,9 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
         setQueue((prev) => [...prev, song]);
       }
       setCurrentSong(song);
+      setIsPlaying(true);
     },
-    [queue]
+    [queue],
   );
 
   const playNext = useCallback(() => {
@@ -120,26 +123,35 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     const currentIndex = queue.findIndex((song) => song.id === currentSong.id);
 
     if (repeatMode === "one") return "Repeating current song";
-    if (repeatMode === "off" && currentIndex === queue.length - 1) return "End of list";
-    if (repeatMode === "all" && currentIndex === queue.length - 1) return queue[0];
+    if (repeatMode === "off" && currentIndex === queue.length - 1)
+      return "End of list";
+    if (repeatMode === "all" && currentIndex === queue.length - 1)
+      return queue[0];
 
     return queue[currentIndex + 1] || "End of list";
   }, [queue, currentSong, repeatMode]);
 
   const addToQueue = useCallback(
     (song: Song) => setQueue((prev) => [...prev, song]),
-    []
+    [],
   );
 
-  const removeFromQueue = useCallback(
-    (songId: string) => setQueue((prev) => prev.filter((s) => s.id !== songId)),
-    []
-  );
+  const removeFromQueue = useCallback((songId: string) => {
+    if (queue.length === 0) {
+      setCurrentSong(null);
+      setIsPlaying(false);
+    }
+    setQueue((prev) => prev.filter((s) => s.id !== songId));
+  }, []);
 
   const clearQueue = useCallback(() => setQueue([]), []);
 
   const createPlaylist = useCallback((name: string) => {
-    const newPlaylist: Playlist = { id: Date.now().toString(), name, songs: [] };
+    const newPlaylist: Playlist = {
+      id: Date.now().toString(),
+      name,
+      songs: [],
+    };
     setPlaylists((prev) => [...prev, newPlaylist]);
   }, []);
 
@@ -148,26 +160,29 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       prev.map((p) =>
         p.id === playlistId && !p.songs.find((s) => s.id === song.id)
           ? { ...p, songs: [...p.songs, song] }
-          : p
-      )
+          : p,
+      ),
     );
   }, []);
 
   const renamePlaylist = useCallback((playlistId: string, newName: string) => {
     setPlaylists((prev) =>
-      prev.map((p) => (p.id === playlistId ? { ...p, name: newName } : p))
+      prev.map((p) => (p.id === playlistId ? { ...p, name: newName } : p)),
     );
   }, []);
 
-  const removeSongFromPlaylist = useCallback((playlistId: string, songId: string) => {
-    setPlaylists((prev) =>
-      prev.map((p) =>
-        p.id === playlistId
-          ? { ...p, songs: p.songs.filter((s) => s.id !== songId) }
-          : p
-      )
-    );
-  }, []);
+  const removeSongFromPlaylist = useCallback(
+    (playlistId: string, songId: string) => {
+      setPlaylists((prev) =>
+        prev.map((p) =>
+          p.id === playlistId
+            ? { ...p, songs: p.songs.filter((s) => s.id !== songId) }
+            : p,
+        ),
+      );
+    },
+    [],
+  );
 
   const deletePlaylist = useCallback((playlistId: string) => {
     setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
@@ -176,10 +191,14 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   const toggleRepeatMode = useCallback(() => {
     setRepeatMode((prev) => {
       switch (prev) {
-        case "off": return "one";
-        case "one": return "all";
-        case "all": return "off";
-        default: return "off";
+        case "off":
+          return "one";
+        case "one":
+          return "all";
+        case "all":
+          return "off";
+        default:
+          return "off";
       }
     });
   }, []);
@@ -217,32 +236,40 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     if (!audioRef.current || !currentSong) return;
 
-    if (isFirstMount.current) {
-      // Restore session: load and seek to saved timestamp, but don't autoplay
-      isFirstMount.current = false;
-      audioRef.current.src = currentSong.downloadUrl[4].url;
-      audioRef.current.load();
-      setDuration(currentSong.duration || 0);
+    const audio = audioRef.current;
 
-      const onCanPlay = () => {
-        if (audioRef.current) {
-          audioRef.current.currentTime = currentTimeRef.current;
-        }
-      };
-      audioRef.current.addEventListener("canplay", onCanPlay, { once: true });
-      return;
+    audio.src = currentSong.downloadUrl[4].url;
+    setDuration(currentSong.duration || 0);
+    audio.load();
+
+    audio.onloadedmetadata = () => {
+      // Restore saved position only on initial session restore
+      if (isFirstMount.current) {
+        audio.currentTime = currentTime;
+        isFirstMount.current = false;
+      } else {
+        audio.currentTime = 0;
+      }
+
+      if (isPlaying) {
+        audio.play().catch((err) => {
+          console.error("Playback blocked:", err);
+          setIsPlaying(false);
+        });
+      }
+    };
+  }, [currentSong]);
+
+  // Play / Pause
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        safePlay();
+      } else {
+        audioRef.current.pause();
+      }
     }
-
-    // Normal song change: load, seek to 0, and autoplay
-    audioRef.current.src = currentSong.downloadUrl[4].url;
-    audioRef.current.load();
-    setCurrentTime(0);
-    currentTimeRef.current = 0;
-    localStorage.setItem("currentTime", "0");
-    setDuration(currentSong.duration || audioRef.current.duration);
-    safePlay();
-    play();
-  }, [currentSong]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isPlaying]);
 
   // Update history when song changes
   useEffect(() => {
@@ -250,7 +277,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       setHistory((prev) => {
         const exists = prev.find((s) => s.id === currentSong.id);
         if (exists) return prev;
-        return [currentSong, ...prev].slice(0, 5);
+        return [currentSong, ...prev].slice(0, 10);
       });
     }
   }, [currentSong]);
@@ -281,22 +308,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
   // Save current time immediately before page unload
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.setItem("currentTime", String(currentTimeRef.current));
+      localStorage.setItem("currentTime", currentTimeRef.current.toString());
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
-
-  // Play / Pause
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch((err) => console.error("Error playing audio:", err));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
 
   // Dominant color from album art
   useEffect(() => {
@@ -344,13 +360,27 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
     if (audioRef.current && currentSong && "mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: he.decode(currentSong.name),
-        artist: currentSong.artists.primary.map((a) => he.decode(a.name)).join(", "),
+        artist: currentSong.artists.primary
+          .map((a) => he.decode(a.name))
+          .join(", "),
         album: currentSong.album.name,
         artwork: [
           { src: currentSong.image[0]?.url, sizes: "96x96", type: "image/png" },
-          { src: currentSong.image[0]?.url, sizes: "128x128", type: "image/png" },
-          { src: currentSong.image[1]?.url, sizes: "192x192", type: "image/png" },
-          { src: currentSong.image[2]?.url, sizes: "512x512", type: "image/png" },
+          {
+            src: currentSong.image[0]?.url,
+            sizes: "128x128",
+            type: "image/png",
+          },
+          {
+            src: currentSong.image[1]?.url,
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: currentSong.image[2]?.url,
+            sizes: "512x512",
+            type: "image/png",
+          },
         ],
       });
 
@@ -360,12 +390,18 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       navigator.mediaSession.setActionHandler("nexttrack", playNext);
       navigator.mediaSession.setActionHandler("seekforward", () => {
         if (audioRef.current) {
-          audioRef.current.currentTime = Math.min(audioRef.current.duration, audioRef.current.currentTime + 10);
+          audioRef.current.currentTime = Math.min(
+            audioRef.current.duration,
+            audioRef.current.currentTime + 10,
+          );
         }
       });
       navigator.mediaSession.setActionHandler("seekbackward", () => {
         if (audioRef.current) {
-          audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+          audioRef.current.currentTime = Math.max(
+            0,
+            audioRef.current.currentTime - 10,
+          );
         }
       });
 
@@ -441,7 +477,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({
       removeFromQueue,
       getNextSong,
       stopAndClose,
-    ]
+    ],
   );
 
   return (

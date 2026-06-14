@@ -2,16 +2,23 @@ import { PaletteOptions } from "@mui/material/styles/createPalette";
 import { lighten, darken } from "@mui/material/styles";
 
 // Define color hex codes for each theme
-const themeColors = {
+export const themeColors = {
   orangered: "#FF5722",
-  pink: "#FFC0CB",
   hotpink: "#FF69B4",
   purple: "#9C27B0",
   blue: "#2196F3",
   lightblue: "#03A9F4",
-  yellow: "#FFEB3B",
-  gold: "#FFD700",
+  oldGold: "#CFB53B",
+  darkGold: "#B8860B",
   raspberry: "#E30B5D",
+  slate: "#64748B",
+  indigo: "#6366F1",
+  teal: "#0F766E",
+  emerald: "#059669",
+  cyan: "#0891B2",
+  violet: "#7C3AED",
+  rose: "#BE185D",
+  amber: "#B45309",
 };
 
 // Function for creating light palettes
@@ -68,24 +75,39 @@ const createDarkPalette = (mainColor: string): PaletteOptions => ({
 
 export const lightPalettes = {
   orangered: createLightPalette(themeColors.orangered),
-  pink: createLightPalette(themeColors.pink),
   hotpink: createLightPalette(themeColors.hotpink),
   purple: createLightPalette(themeColors.purple),
   blue: createLightPalette(themeColors.blue),
   lightblue: createLightPalette(themeColors.lightblue),
-  yellow: createLightPalette(themeColors.yellow),
-  gold: createLightPalette(themeColors.gold),
+  oldGold: createLightPalette(themeColors.oldGold),
+  darkGold: createLightPalette(themeColors.darkGold),
   raspberry: createLightPalette(themeColors.raspberry),
+  slate: createLightPalette(themeColors.slate),
+  indigo: createLightPalette(themeColors.indigo),
+  teal: createLightPalette(themeColors.teal),
+  emerald: createLightPalette(themeColors.emerald),
+  cyan: createLightPalette(themeColors.cyan),
+  violet: createLightPalette(themeColors.violet),
+  rose: createLightPalette(themeColors.rose),
+  amber: createLightPalette(themeColors.amber),
 };
 
 export const darkPalettes = {
   orangered: createDarkPalette(themeColors.orangered),
-  pink: createDarkPalette(themeColors.pink),
   hotpink: createDarkPalette(themeColors.hotpink),
   purple: createDarkPalette(themeColors.purple),
   blue: createDarkPalette(themeColors.blue),
   lightblue: createDarkPalette(themeColors.lightblue),
-  yellow: createDarkPalette(themeColors.yellow),
-  gold: createDarkPalette(themeColors.gold),
+  oldGold: createDarkPalette(themeColors.oldGold),
+  darkGold: createDarkPalette(themeColors.darkGold),
   raspberry: createDarkPalette(themeColors.raspberry),
+  slate: createDarkPalette(themeColors.slate),
+  indigo: createDarkPalette(themeColors.indigo),
+  teal: createDarkPalette(themeColors.teal),
+  emerald: createDarkPalette(themeColors.emerald),
+  cyan: createDarkPalette(themeColors.cyan),
+  violet: createDarkPalette(themeColors.violet),
+  rose: createDarkPalette(themeColors.rose),
+  amber: createDarkPalette(themeColors.amber),
 };
+

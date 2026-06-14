@@ -1,4 +1,6 @@
-{/* Modified by Yugant N (05-2026), Added new functionality and design on Home Page */}
+{
+  /* Modified by Yugant N (05-2026), Added new functionality and design on Home Page */
+}
 
 import {
   Box,
@@ -18,6 +20,7 @@ import { SongList } from "../components/player/SongList";
 import { usePlayer } from "../context/player/PlayerContext";
 import { useLayout } from "../context/layout/LayoutContext";
 import { Song } from "../constants/api/interfaces/song";
+import he from "he";
 
 export const Home = () => {
   const [trendingSongs, setTrendingSongs] = useState<Song[]>([]);
@@ -68,151 +71,143 @@ export const Home = () => {
       {/* {searchQuery.trim().length > 0 ? (
         <SearchResult />
       ) : ( */}
-        <>
-          {/* HERO SECTION */}
+      <>
+        {/* HERO SECTION */}
+        <Box
+          sx={{
+            position: "relative",
+            overflow: "hidden",
+            borderRadius: 6,
+            p: {
+              xs: 2.5,
+              md: 3,
+            },
+            minHeight: isSmallScreen ? 240 : 260,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: { xs: "column", md: "row" },
+            alignContent: { xs: "flex-start", md: "center" },
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 25%, ${theme.palette.mode === "light" ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText} 105%)`,
+            boxShadow: theme.shadows[10],
+          }}
+        >
           <Box
             sx={{
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: 6,
-              p: {
-                xs: 2.5,
-                md: 4,
-              },
-              minHeight: isSmallScreen ? 240 : 260,
+              zIndex: 2,
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: {xs: "column", md: "row"},
-              alignContent: {xs: "flex-start", md:"center"},
-              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-              color: "white",
-              boxShadow: theme.shadows[10],
+              height: "100%",
+              width: "100%",
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              gap: 1,
+              p: 0.5,
             }}
           >
-            <Box
+            <Chip
+              icon={<GraphicEqRoundedIcon />}
+              label="Your music space"
               sx={{
-                zIndex: 2,
-                maxWidth: { xs: "100%", md:600},
-                display: "flex",
-                flexDirection: "column",
-                gap: 1.5,
+                width: "fit-content",
+                backdropFilter: "blur(10px)",
+                backgroundColor: "rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+            />
+
+            <Typography
+              variant={isSmallScreen ? "h4" : "h3"}
+              sx={{
+                fontWeight: 800,
+                lineHeight: 1.1,
               }}
             >
-              <Chip
-                icon={<GraphicEqRoundedIcon />}
-                label="Your music space"
-                sx={{
-                  width: "fit-content",
-                  backdropFilter: "blur(10px)",
-                  backgroundColor: "rgba(255,255,255,0.15)",
-                  color: "white",
-                  border: "1px solid rgba(255,255,255,0.2)",
-                }}
-              />
+              Discover music that matches your vibe.
+            </Typography>
 
-              <Typography
-                variant={isSmallScreen ? "h4" : "h3"}
-                sx={{
-                  fontWeight: 800,
-                  lineHeight: 1.1,
-                }}
-              >
-                Discover music that matches your vibe.
-              </Typography>
+            <Typography variant="body1" sx={{ color: "text.secondary" }}>
+              Explore trending tracks, continue your sessions, and keep your
+              queue flowing without distractions.
+            </Typography>
 
-              <Typography
-                variant="body1"
-                sx={{
-                  opacity: 0.9,
-                  maxWidth: { xs: "100%", md: 520},
-                }}
-              >
-                Explore trending tracks, continue your sessions, and keep your
-                queue flowing without distractions.
-              </Typography>
-
-              {currentSong && (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  sx={{
-                    mt: 1,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <Chip
-                    label="Now Playing"
-                    size="small"
-                    sx={{
-                      backgroundColor: "rgba(255,255,255,0.18)",
-                      color: "white",
-                    }}
-                  />
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontWeight: 600,
-                      wordBreak: "break-word",
-                    }}
-                  >
-                    {currentSong.name}
-                  </Typography>
-                </Stack>
-              )}
-            </Box>
-
-            {!isSmallScreen && (
+            {currentSong && (
               <Box
                 sx={{
-                  position: "absolute",
-                  right: -40,
-                  bottom: -40,
-                  width: 220,
-                  height: 220,
-                  borderRadius: "50%",
-                  background: "rgba(255,255,255,0.08)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  overflow: "hidden",
+                  minWidth: 0,
+                  gap: 1,
                 }}
-              />
+              >
+                <Chip
+                  label={<Typography variant="body2">Now Playing</Typography>}
+                  size="small"
+                  sx={{
+                    backgroundColor: "rgba(255,255,255,0.18)",
+                  }}
+                />
+                <Typography
+                  variant="body2"
+                  noWrap
+                  sx={{
+                    fontWeight: 500,
+                  }}
+                >
+                  {he.decode(
+                    `${currentSong.name} by ${currentSong.artists.primary.map((artist) => artist.name).join(", ")}`,
+                  )}
+                </Typography>
+              </Box>
             )}
           </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              right: -100,
+              bottom: 0,
+              width: 260,
+              height: 260,
+              borderRadius: 50,
+              background: "rgba(255,255,255,0.08)",
+            }}
+          />
+        </Box>
 
-          {/* TRENDING */}
-          <MediaSection
-            title="Trending Songs"
-            subtitle="Fresh tracks people are listening to right now"
-            icon={<TrendingUpRoundedIcon />}
-          >
-            {loading ? (
-              <Stack spacing={2}>
-                {[...Array(5)].map((_, index) => (
-                  <Skeleton
-                    key={index}
-                    variant="rounded"
-                    height={72}
-                    animation="wave"
-                  />
-                ))}
-              </Stack>
-            ) : (
-              <SongList songs={trendingSongs} />
-            )}
-          </MediaSection>
-
-          {/* CONTINUE LISTENING */}
-          {recentlyPlayed.length > 0 && (
-            <MediaSection
-              title="Continue Listening"
-              subtitle="Jump back into your recent tracks"
-              icon={<HistoryRoundedIcon />}
-            >
-              <SongList songs={recentlyPlayed} />
-            </MediaSection>
+        {/* TRENDING */}
+        <MediaSection
+          title="Trending Songs"
+          subtitle="Fresh tracks people are listening to right now"
+          icon={<TrendingUpRoundedIcon />}
+        >
+          {loading ? (
+            <Stack spacing={2}>
+              {[...Array(5)].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  variant="rounded"
+                  height={72}
+                  animation="wave"
+                />
+              ))}
+            </Stack>
+          ) : (
+            <SongList songs={trendingSongs} />
           )}
-        </>
-      {/* )} */}
+        </MediaSection>
+
+        {/* CONTINUE LISTENING */}
+        {recentlyPlayed.length > 0 && (
+          <MediaSection
+            title="Continue Listening"
+            subtitle="Jump back into your recent tracks"
+            icon={<HistoryRoundedIcon />}
+          >
+            <SongList songs={recentlyPlayed} />
+          </MediaSection>
+        )}
+      </>
     </Box>
   );
 };

@@ -1,10 +1,4 @@
-import {
-  Box,
-  Divider,
-  SxProps,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, SxProps, Theme, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 interface MediaSectionProps {
