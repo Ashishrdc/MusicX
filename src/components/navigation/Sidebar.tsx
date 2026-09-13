@@ -1,10 +1,11 @@
 // import { Box, Slide, Typography, Tooltip } from "@mui/material";
+
 // import { useLayout } from "../../context/layout/LayoutContext";
 // import { routes } from "../../constants/routes/NavRoutes";
+
 // import { CustomTitle } from "../common/title/CustomTitle";
 // import { LinkWrapper } from "./LinkWrapper";
-// import { PaletteSelector } from "../palette/PaletteSelector";
-// import { ThemeAccordion } from "../palette/ThemeAccordion";
+// import { ThemeReactor } from "../palette/ThemeReactor";
 
 // export const Sidebar = () => {
 //   const { sidebarState, isSmallScreen, toggleSidebarState } = useLayout();
@@ -23,15 +24,17 @@
 //         height: "100%",
 //         display: "flex",
 //         flexDirection: "column",
-//         justifyContent: "space-between",
+//         overflow: "hidden",
 //       }}
 //     >
-//       {/* Sidebar Header */}
+//       {/* Header */}
 //       <Box
 //         sx={{
 //           textAlign: "center",
 //           cursor: "pointer",
-//           transition: "transform 0.3s ease",
+//           transition: "transform .3s ease",
+//           flexShrink: 0,
+
 //           "&:hover": {
 //             transform: "scale(1.05)",
 //           },
@@ -40,19 +43,35 @@
 //         <CustomTitle />
 //       </Box>
 
-//       {/* Sidebar Navigation */}
+//       {/* Navigation */}
 //       <Box
 //         sx={{
+//           flex: 1,
+//           minHeight: 0,
+
+//           overflowY: "auto",
+//           overflowX: "hidden",
+
 //           display: "flex",
 //           flexDirection: "column",
+
 //           alignItems: isExpanded ? "flex-start" : "center",
-//           flexGrow: 1,
-//           padding: 2,
+
+//           px: 2,
+//           py: 1,
 //           gap: 1.5,
+
+//           "&::-webkit-scrollbar": {
+//             width: 4,
+//           },
+
+//           "&::-webkit-scrollbar-thumb": {
+//             borderRadius: 999,
+//             backgroundColor: "rgba(255,255,255,.15)",
+//           },
 //         }}
 //       >
 //         {routes.map(({ path, name, icon }) => (
-//           /* Added by Yugant N (05-2026), to Add Tooltip in Sidebar Toggle */
 //           <Tooltip
 //             key={name}
 //             title={!isExpanded ? name : ""}
@@ -65,30 +84,34 @@
 //                   sx={{
 //                     display: "flex",
 //                     alignItems: "center",
+
 //                     justifyContent: isExpanded ? "flex-start" : "center",
+
 //                     width: "100%",
 //                     gap: 2,
 //                   }}
 //                 >
-//                   {/* ICON */}
 //                   <Box
 //                     sx={{
 //                       display: "flex",
+
 //                       alignItems: "center",
+
 //                       justifyContent: "center",
+
 //                       flexShrink: 0,
+
 //                       width: isSmallScreen ? 24 : 50,
 //                     }}
 //                   >
 //                     {icon}
 //                   </Box>
 
-//                   {/* TEXT */}
-
 //                   <Slide
 //                     in={isExpanded}
 //                     direction="right"
-//                     mountOnEnter
+//                     timeout={400}
+//                     // mountOnEnter
 //                     unmountOnExit
 //                   >
 //                     <Box
@@ -102,6 +125,7 @@
 //                       <Typography
 //                         sx={{
 //                           fontWeight: "bold",
+
 //                           whiteSpace: "nowrap",
 //                         }}
 //                       >
@@ -114,26 +138,48 @@
 //             </Box>
 //           </Tooltip>
 //         ))}
-
-//         <Box
-//           sx={{
-//             width: "100%",
-//           }}
-//         >
-//           {/* Added by Yugant N (05-2026), to Add PaletteSelector in Sidebar */}
-//           <PaletteSelector />
-//           <ThemeAccordion />
-//         </Box>
 //       </Box>
 
-//       {/* Sidebar Footer */}
+//       {/* Theme Panel */}
+//       {isExpanded ? (
+//         <Slide
+//           in={isExpanded}
+//           direction="left"
+//           timeout={400}
+//           mountOnEnter
+//           unmountOnExit
+//         >
+//           <Box
+//             sx={{
+//               px: 2,
+//               pb: 1,
+//               flexShrink: 0,
+//             }}
+//           >
+//             <ThemeReactor />
+//           </Box>
+//         </Slide>
+//       ) : (
+//         <Box
+//           sx={{
+//             px: 2,
+//             pb: 1.5,
+//             flexShrink: 0,
+//           }}
+//         >
+//           <ThemeReactor />
+//         </Box>
+//       )}
+
+//       {/* Footer */}
 //       <Box
 //         sx={{
 //           display: "flex",
 //           alignItems: "center",
 //           justifyContent: "center",
 //           textAlign: "center",
-//           padding: 2,
+//           p: 2,
+//           flexShrink: 0,
 //         }}
 //       >
 //         {isExpanded ? (
@@ -141,11 +187,10 @@
 //             variant="body2"
 //             sx={{
 //               fontWeight: "bold",
-//               opacity: isExpanded ? 1 : 0,
-//               transition: "all 0.8s ease",
 //             }}
 //           >
-//             Made with ❤️ by <br />
+//             Made with ❤️ by
+//             <br />
 //             Ashish Chaurasiya
 //           </Typography>
 //         ) : (
@@ -153,7 +198,6 @@
 //             variant="body2"
 //             sx={{
 //               fontWeight: "bold",
-//               transition: "all 0.8s ease",
 //             }}
 //           >
 //             ❤️
@@ -163,7 +207,6 @@
 //     </Box>
 //   );
 // };
-
 import { Box, Slide, Typography, Tooltip } from "@mui/material";
 
 import { useLayout } from "../../context/layout/LayoutContext";
@@ -178,6 +221,9 @@ export const Sidebar = () => {
 
   const isExpanded = sidebarState === "open-expanded";
 
+  const expandEase = "cubic-bezier(0.22, 1, 0.36, 1)";
+  const collapseEase = "cubic-bezier(0.4, 0, 1, 1)";
+
   const handleClick = () => {
     if (isSmallScreen) {
       toggleSidebarState("closed");
@@ -188,28 +234,45 @@ export const Sidebar = () => {
     <Box
       sx={{
         height: "100%",
+
         display: "flex",
         flexDirection: "column",
+
         overflow: "hidden",
       }}
     >
-      {/* Header */}
+      {/* =====================================================
+          Header
+      ====================================================== */}
+
       <Box
         sx={{
           textAlign: "center",
+
           cursor: "pointer",
-          transition: "transform .3s ease",
+
           flexShrink: 0,
 
+          transition: `
+            transform 350ms ${expandEase}
+          `,
+
           "&:hover": {
-            transform: "scale(1.05)",
+            transform: "scale(1.03)",
+          },
+
+          "&:active": {
+            transform: "scale(.98)",
           },
         }}
       >
         <CustomTitle />
       </Box>
 
-      {/* Navigation */}
+      {/* =====================================================
+          Navigation
+      ====================================================== */}
+
       <Box
         sx={{
           flex: 1,
@@ -225,7 +288,12 @@ export const Sidebar = () => {
 
           px: 2,
           py: 1,
+
           gap: 1.5,
+
+          transition: `
+            align-items 450ms ${expandEase}
+          `,
 
           "&::-webkit-scrollbar": {
             width: 4,
@@ -233,11 +301,12 @@ export const Sidebar = () => {
 
           "&::-webkit-scrollbar-thumb": {
             borderRadius: 999,
+
             backgroundColor: "rgba(255,255,255,.15)",
           },
         }}
       >
-        {routes.map(({ path, name, icon }) => (
+        {routes.map(({ path, name, icon }, index) => (
           <Tooltip
             key={name}
             title={!isExpanded ? name : ""}
@@ -254,37 +323,72 @@ export const Sidebar = () => {
                     justifyContent: isExpanded ? "flex-start" : "center",
 
                     width: "100%",
+
                     gap: 2,
+
+                    transition: `
+                      gap 400ms ${expandEase}
+                    `,
                   }}
                 >
+                  {/* =================================================
+                      Icon
+                  ================================================== */}
+
                   <Box
                     sx={{
                       display: "flex",
 
                       alignItems: "center",
-
                       justifyContent: "center",
 
                       flexShrink: 0,
 
                       width: isSmallScreen ? 24 : 50,
+
+                      transition: `
+                        transform 350ms ${expandEase},
+                        width 400ms ${expandEase}
+                      `,
+
+                      "&:hover": {
+                        transform: "scale(1.06)",
+                      },
                     }}
                   >
                     {icon}
                   </Box>
 
+                  {/* =================================================
+                      Navigation Label
+                  ================================================== */}
+
                   <Slide
                     in={isExpanded}
                     direction="right"
-                    mountOnEnter
+                    timeout={{
+                      enter: 320,
+                      exit: 220,
+                    }}
+                    easing={{
+                      enter: expandEase,
+                      exit: collapseEase,
+                    }}
+                    style={{
+                      transitionDelay: isExpanded ? `${index * 30}ms` : "0ms",
+                    }}
                     unmountOnExit
                   >
                     <Box
                       sx={{
                         display: "flex",
+
                         width: "100%",
+
                         alignItems: "center",
                         justifyContent: "flex-start",
+
+                        overflow: "hidden",
                       }}
                     >
                       <Typography
@@ -292,6 +396,10 @@ export const Sidebar = () => {
                           fontWeight: "bold",
 
                           whiteSpace: "nowrap",
+
+                          overflow: "hidden",
+
+                          textOverflow: "ellipsis",
                         }}
                       >
                         {name}
@@ -305,13 +413,30 @@ export const Sidebar = () => {
         ))}
       </Box>
 
-      {/* Theme Panel */}
+      {/* =====================================================
+          Theme Panel
+      ====================================================== */}
+
       {isExpanded ? (
-        <Slide in={isExpanded} direction="down" timeout={500} unmountOnExit>
+        <Slide
+          in={isExpanded}
+          direction="left"
+          timeout={{
+            enter: 400,
+            exit: 250,
+          }}
+          easing={{
+            enter: expandEase,
+            exit: collapseEase,
+          }}
+          mountOnEnter
+          unmountOnExit
+        >
           <Box
             sx={{
               px: 2,
-              pb: 1.5,
+              pb: 1,
+
               flexShrink: 0,
             }}
           >
@@ -323,45 +448,92 @@ export const Sidebar = () => {
           sx={{
             px: 2,
             pb: 1.5,
+
             flexShrink: 0,
+
+            transition: `
+              padding 400ms ${expandEase}
+            `,
           }}
         >
           <ThemeReactor />
         </Box>
       )}
 
-      {/* Footer */}
+      {/* =====================================================
+          Footer
+      ====================================================== */}
+
       <Box
         sx={{
+          position: "relative",
+
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+
           textAlign: "center",
+
           p: 2,
+
           flexShrink: 0,
+
+          minHeight: 58,
+
+          overflow: "hidden",
         }}
       >
-        {isExpanded ? (
-          <Typography
-            variant="body2"
-            sx={{
-              fontWeight: "bold",
-            }}
-          >
-            Made with ❤️ by
-            <br />
-            Ashish Chaurasiya
-          </Typography>
-        ) : (
-          <Typography
-            variant="body2"
-            sx={{
-              fontWeight: "bold",
-            }}
-          >
-            ❤️
-          </Typography>
-        )}
+        {/* Expanded Footer */}
+
+        <Typography
+          variant="body2"
+          sx={{
+            position: "absolute",
+
+            fontWeight: "bold",
+
+            whiteSpace: "nowrap",
+
+            opacity: isExpanded ? 1 : 0,
+
+            transform: isExpanded ? "translateY(0)" : "translateY(8px)",
+
+            transition: `
+              opacity 220ms ease,
+              transform 320ms ${expandEase}
+            `,
+
+            pointerEvents: "none",
+          }}
+        >
+          Made with ❤️ by
+          <br />
+          Ashish Chaurasiya
+        </Typography>
+
+        {/* Collapsed Footer */}
+
+        <Typography
+          variant="body2"
+          sx={{
+            position: "absolute",
+
+            fontWeight: "bold",
+
+            opacity: isExpanded ? 0 : 1,
+
+            transform: isExpanded ? "scale(.75)" : "scale(1)",
+
+            transition: `
+              opacity 180ms ease,
+              transform 280ms ${expandEase}
+            `,
+
+            pointerEvents: "none",
+          }}
+        >
+          ❤️
+        </Typography>
       </Box>
     </Box>
   );

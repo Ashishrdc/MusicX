@@ -28,7 +28,8 @@ export const PaletteSelector = () => {
   return (
     <>
       <Tooltip
-        disableInteractive title={!isExpanded ? "Theme Color" : ""}
+        disableInteractive
+        title={!isExpanded ? "Theme Color" : ""}
         placement="bottom"
       >
         <Box
